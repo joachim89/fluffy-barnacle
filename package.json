@@ -1,17 +1,19 @@
 {
-  "name": "demo",
+  "name": "github_heroku_test",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "Dette er et dokument som beskriver prosjektet.",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
-  "keywords": [],
-  "author": "Joachim",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joachim89/fluffy-barnacle.git"
+  },
+  "author": "webmagster <magnus@kjelland.com>",
   "license": "ISC",
-  "dependencies": {
-    "express": "^4.16.4"
-  }
+  "bugs": {
+    "url": "https://github.com/joachim89/fluffy-barnacle/issues"
+  },
+  "homepage": "https://github.com/joachim89/fluffy-barnacle#readme"
 }
-
