@@ -1,9 +1,13 @@
-var express = require(‘express’);
-var port = process.env.PORT || 3000;
-var app = express();
-app.get(‘/’, function (req, res) {
- res.send(JSON.stringify({ Hello: ‘World’}));
-});
-app.listen(port, function () {
- console.log(`Example app listening on port !`);
+const http = require("http"),
+    fs = require("fs");
+const port=process.env.PORT || 3000
+fs.readFile("./index.html", function (err, html) {
+    if (err) {
+        throw err; 
+    }       
+    http.createServer(function(request, response) {  
+        response.writeHeader(200, {"Content-Type": "text/html"});  
+        response.write(html);  
+        response.end();  
+    }).listen(port);
 });
