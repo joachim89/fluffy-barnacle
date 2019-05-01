@@ -2,7 +2,7 @@
   "name": "github_heroku_test",
   "version": "1.0.0",
   "description": "Dette er et dokument som beskriver prosjektet.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/joachim89/fluffy-barnacle/issues"
   },
-  "homepage": "https://github.com/joachim89/fluffy-barnacle#readme"
+  "homepage": "https://github.com/joachim89/fluffy-barnacle#readme",
+  "dependencies": {
+    "finalhandler": "^1.1.1",
+    "serve-static": "^1.13.2"
+  }
 }
