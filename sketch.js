@@ -191,7 +191,7 @@ for(i=0;i<(windowWidth/80);i++){ // lager bakgrunnsbildet.
 
 //####### HER KOMMER KONTROLLENE FOR Å STYRE SPILLERN  ##########////////////
 //check all controls:
-if(keyIsDown(UP_ARROW)||keyIsDown(LEFT_ARROW)||keyIsDown(RIGHT_ARROW)||keyIsDown(DOWN_ARROW)){
+if(keyIsDown(UP_ARROW)||keyIsDown(LEFT_ARROW)||keyIsDown(RIGHT_ARROW)||keyIsDown(DOWN_ARROW)||mouseIsPressed){
 
 }else{
     player.static();
