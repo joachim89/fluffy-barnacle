@@ -171,13 +171,14 @@ function setup(){
    player = new Player;
     groundY = windowHeight-(windowHeight/3);
     
-    //song[0].play();
+    song[0].play();
 }
 
 // #################### DRAW ######################
 
 function draw(){
-background(122,90,18);
+// kan bruke scale(0.5); for å få ting til å bli mindre
+    background(122,90,18);
 image(bg,0,0,windowWidth,windowHeight);
 
 for(i=0;i<(windowWidth/80);i++){ // lager bakgrunnsbildet.
@@ -229,15 +230,29 @@ if(mouseIsPressed){
     // if(mouseY<player.y){
     //    player.jump();
     // }
-   
-
     if(mouseX<player.x){
         right = false;
-        player.walk();
     }else{
         right = true;
+    }
+   if(abs(player.x-mouseX)>abs(player.y-mouseY)){
+    if(mouseX<player.x){
+       
+        player.walk();
+    }else{
+       
         player.walk();
     }
+   }else{
+    if(mouseY<player.y){
+        player.jump();
+    }else{
+       
+        player.lookdown();
+    }
+   }
+
+   
 
 }
 
