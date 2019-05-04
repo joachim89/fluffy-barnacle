@@ -1,6 +1,7 @@
 let player;
 let ground; 
 let bg;
+let groundY;
 //vars til spillerbevegelser
 let right = false; //går til høyre eller venstre?
 let falling = true; //faller?
@@ -67,7 +68,7 @@ class Player {
 
     //TYNGDEKRAFT
     gravity(){
-        if(this.y<580){
+        if(this.y<(groundY-50)){
             this.y+=30; 
            // this.img = playerJump[2];
             falling=true;
@@ -168,7 +169,7 @@ function setup(){
    createCanvas(windowWidth,windowHeight);
     frameRate(15);
    player = new Player;
-    
+    groundY = windowHeight-(windowHeight/3);
     
     //song[0].play();
 }
@@ -180,7 +181,7 @@ background(122,90,18);
 image(bg,0,0,windowWidth,windowHeight);
 
 for(i=0;i<(windowWidth/80);i++){ // lager bakgrunnsbildet.
-    image(ground,80*i,600,80,188);
+    image(ground,80*i,groundY,80,188);
     }
 
 
@@ -259,3 +260,8 @@ fill(0);
 text(vernr,windowWidth/2,100)
 }
 
+function windowResized() {
+	resizeCanvas(windowWidth, windowHeight);
+
+    groundY = windowHeight-(windowHeight/3);
+  }
