@@ -279,4 +279,5 @@ function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
 
     groundY = windowHeight-(windowHeight/3);
+    player.y=groundY-50;
   }
