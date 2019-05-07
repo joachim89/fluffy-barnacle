@@ -17,6 +17,7 @@ let canJump = true;
 let jump = false;
 let pogo = false;
 let fallcount =0;
+let boost = 0;
 
 //scroller
 let xscroll = 0;
@@ -26,6 +27,8 @@ let yscroll = 0;
 let vernr = "0.0.0.3";
 //sound vars
 let song = [];
+let jumpsnd;
+let walksnd;
 // bilder til spiller
 let playerWalk = [];
 let playerJump = [];
@@ -91,6 +94,9 @@ function preload() {
     //sounds
     song[0] = loadSound("sounds/oasis.mp3");
     song[1] = loadSound("sounds/faster.mp3");
+
+    walksnd = loadSound("sounds/walk2.mp3");
+    jumpsnd = loadSound("sounds/jump.mp3");
 }
 
 // GROUND
@@ -210,6 +216,8 @@ class Player {
     move(dir) {
         if (jump) {
             player.jump();
+            jumpsnd.playMode("untilDone");
+            jumpsnd.play();
         }
         this.vx += this.nx;
         this.vy += this.ny;
@@ -233,26 +241,37 @@ class Player {
             this.y += this.vy;
         }
         //this.y += this.vy;
+
+        
+          
         if (dir == "right") {
             if(jump||falling){
-                player.nx=20;
+                player.nx=20+boost;
             }else{
-            player.nx = 15;
+            player.nx = 15+boost;
+            if(boost<12){
+                boost+=2;
+                }
              }
         } else if (dir == "left") {
             if(jump||falling){
-                player.nx=-20;
+                player.nx=-20-boost;
             }else{
-            player.nx = -15;
+            player.nx = -15-boost;
+            if(boost<12){
+                boost+=2;
+                }
             }
         } else {
             player.nx = 0;
         }
+        walksnd.playMode("untilDone");
         if (this.vx < -1.9 && this.vy > -2) {
             this.img = playerWalkl[this.walkCount % 3];
-
+            
+            walksnd.play();
         } else if (this.vx > 1.9 && this.vy < 2) {
-
+            walksnd.play();
             this.img = playerWalk[this.walkCount % 3];
         } else if (!pressed && !pogo) {
             if (this.vx < 0) { this.img = playerStaticl; } else { this.img = playerStatic; }
@@ -365,9 +384,11 @@ function setup() {
         grnd.push(new Ground);
         grnd[i].id = i;
         grnd[i].type = i % 3;
+        
         if (i < 150) {
             if(i%3==0){
-                var r = random( 50)+1;
+                var r = random( 40)+1;
+               
             }
             grnd[i].y = 200 + round((i - 1) / 3) * r; // +(i*10);
             grnd[i].x = 0 + (i * 81);
@@ -376,7 +397,7 @@ function setup() {
             grnd[i].x = -800 + (i * 81);
         }
     }
-    song[0].play();
+    //song[0].loop();
 }
 
 
@@ -389,6 +410,7 @@ function setup() {
 function draw() {
     // kan bruke scale(0.5); for å få ting til å bli mindre
     background(0); 
+    console.log(boost);
     image(bg[2], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);
     fill(255);
     text("Du står på brikke nr: " + String(round((hitName+2)/3)), windowWidth / 2, 50);
@@ -433,6 +455,7 @@ function draw() {
     } else {
         if (!falling) { player.static(); }
         pressed = false;
+        boost=0;
     }
 
     //CONTROLS
@@ -562,8 +585,14 @@ function draw() {
     fill(0);
     text(vernr, windowWidth / 2, 100)
 }
+function touchStarted(event) {
+	//console.log(event);
+	if(event.touches){if(event.touches.length>1){
+		console.log("TO TRYKK!");
+	}}
+  }
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-    player.y = grnd[hitName].y;
+    if(player){player.y = grnd[hitName].y;}
 }
