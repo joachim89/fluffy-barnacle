@@ -4,6 +4,7 @@ let grnd = [];
 let grndHit = [];
 let block;
 let blocks = [];
+let hiScore = 0;
 
 let bg = [];
 let groundY;
@@ -15,6 +16,7 @@ let falling = true; //faller?
 let canJump = true;
 let jump = false;
 let pogo = false;
+let fallcount =0;
 
 //scroller
 let xscroll = 0;
@@ -176,11 +178,19 @@ class Player {
             } else {
                 this.img = playerJump[1];
             }
+            fallcount ++;
+            if(fallcount>100){
+                player.y = grnd[0].y;
+                player.x = grnd[0].x;
+                xscroll=0;
+                yscroll=0;
+            }
 
         } else {
             this.fallspeed = 10;
             this.jumpCount = 0;
             canJump = true;
+            fallcount=0;
         }
 
     }
@@ -381,8 +391,11 @@ function draw() {
     background(0); 
     image(bg[2], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);
     fill(255);
-    text("Du står på brikke nr: " + String(round((hitName+2)/3)), windowWidth / 2, 150);
-
+    text("Du står på brikke nr: " + String(round((hitName+2)/3)), windowWidth / 2, 50);
+    if(round((hitName+2)/3)>hiScore){
+        hiScore=round((hitName+2)/3);
+    }
+    text("Hiscore: " + hiScore, windowWidth / 2, 40);
     scale(0.5);
    // background(122, 90, 18);
   
