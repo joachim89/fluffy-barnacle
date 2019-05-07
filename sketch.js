@@ -207,9 +207,9 @@ class Player {
         this.vx *= this.friction;
         this.vy *= this.friction;
 
-        if (this.x < (windowWidth / 2) - 100 && keyIsDown(LEFT_ARROW)) {
+        if (this.x < (windowWidth / 2) - 100 && ( keyIsDown(LEFT_ARROW)||(mouseIsPressed && mouseX<(windowWidth/3)))) {
             xscroll -= this.vx;
-        } else if (this.x > (windowWidth / 2) + 100 && keyIsDown(RIGHT_ARROW)) {
+        } else if (this.x > (windowWidth / 2) + 100 && (keyIsDown(RIGHT_ARROW) || (mouseIsPressed && mouseX>(windowWidth-(windowWidth/3))))) {
             xscroll -= this.vx;
         } else {
             this.x += this.vx;
@@ -378,9 +378,15 @@ function setup() {
 
 function draw() {
     // kan bruke scale(0.5); for å få ting til å bli mindre
+    background(0); 
+    image(bg[2], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);
+    fill(255);
+    text("Du står på brikke nr: " + String(round((hitName+2)/3)), windowWidth / 2, 150);
+
+    scale(0.5);
    // background(122, 90, 18);
-   background(0); 
-   image(bg[2], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);
+  
+ 
     noStroke();
 
     // for(i=0;i<(windowWidth/80);i++){ // lager bakgrunnsbildet rett bortover.
@@ -438,9 +444,9 @@ function draw() {
     if (keyIsDown(RIGHT_ARROW)) {
         player.move("right");
     } else if (keyIsDown(LEFT_ARROW)) {
-        player.move("left")
+        player.move("left");
     } else {
-        player.move("0");
+        //player.move("0");
     }
 
     //se opp
@@ -457,25 +463,70 @@ function draw() {
         // if(mouseY<player.y){
         //    player.jump();
         // }
-        if (mouseX < player.x) {
-            right = false;
-        } else {
-            right = true;
+        // if (mouseX < player.x) {
+        //     right = false;
+        // } else {
+        //     right = true;
+        // }
+        // if (abs(player.x - mouseX) > abs(player.y - mouseY)) {
+        //     if (mouseX < player.x) {
+
+        //          player.move("left");
+        //     } else {
+
+        //         player.move("right");
+        //     }
+        // } else {
+        //     if (mouseY < player.y && canJump) {
+        //         jump=true;
+        //     } else if(mouseY>player.y){
+
+        //         player.lookdown();
+        //     }
+        // }
+        if(mouseX<windowWidth/3 ){
+            if(mouseY<windowHeight/3){
+                if(canJump){
+                    jump = true;
+                }
+                player.move("left");
+            }
+            if(mouseY>windowHeight/3 && mouseY < windowHeight-(windowHeight/3)){
+                player.move("left");
+            }
+            if(mouseY>windowHeight-(windowHeight/3)){
+                player.lookdown();
+
+            }
+
         }
-        if (abs(player.x - mouseX) > abs(player.y - mouseY)) {
-            if (mouseX < player.x) {
+        if(mouseX>windowWidth/3 && mouseX < windowWidth-(windowWidth/3)){
+            if(mouseY<windowHeight/3){
+                if(canJump){
+                    jump = true;
+                }
+            }
+            if(mouseY>windowHeight/3 && mouseY < windowHeight-(windowHeight/3)){
+                player.lookup();
+            }
+            if(mouseY>windowHeight-(windowHeight/3)){
+                player.lookdown();
 
-                 player.move("left");
-            } else {
-
+            }
+        }
+        if(mouseX>windowWidth-(windowWidth/3)){
+            if(mouseY<windowHeight/3){
+                if(canJump){
+                    jump = true;
+                }
                 player.move("right");
             }
-        } else {
-            if (mouseY < player.y && canJump) {
-                jump=true;
-            } else if(mouseY>player.y){
-
+            if(mouseY>windowHeight/3 && mouseY < windowHeight-(windowHeight/3)){
+                player.move("right");
+            }
+            if(mouseY>windowHeight-(windowHeight/3)){
                 player.lookdown();
+
             }
         }
 
@@ -491,8 +542,7 @@ function draw() {
 
     player.show();
     fill(255);
-    text("Du står på brikke nr: " + String(round((hitName+2)/3)), windowWidth / 2, 150);
-
+   
 
     //###############################################
     textAlign(CENTER);
@@ -502,7 +552,5 @@ function draw() {
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-
-    groundY = windowHeight - (windowHeight / 3);
-    player.y = groundY - 50;
+    player.y = grnd[hitName].y;
 }
