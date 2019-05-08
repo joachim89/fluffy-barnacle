@@ -2,16 +2,13 @@ let player;
 let ground;
 let grnd = [];
 let grndHit = [];
-let grndHitEnemy = [];
 let block;
 let blocks = [];
 let hiScore = 0;
-let nrBlocks = 50;
 
 let bg = [];
 let groundY;
 let hitName;
-let enemyHitName;
 let pressed;
 //vars til spillerbevegelser
 let right = false; //går til høyre eller venstre?
@@ -105,82 +102,50 @@ function preload() {
 }
 
 // GROUND
-
 class Block {
-	constructor() {
-		this.x;
-		this.y;
-		this.len = round(random(2, 10));
-		this.id;
-		this.w;
-        this.hit = false;
-        this.enemyHit=false;
-        this.shift = 50;
-
-	}
-	show() {
-		for (var a = 0; a < this.len; a++) {
-			if (a == 0) {
-				image(rock[0], this.x + xscroll, this.y + this.shift + yscroll, 80, 100);
-			}
-			if (a > 0 && a < this.len - 1) {
-				image(rock[1], this.x + (a * 80) + xscroll, this.y + this.shift +yscroll, 80, 100);
-			}
-			if (a == this.len - 1) {
-				image(rock[2], this.x + (a * 80) + xscroll, this.y + this.shift +yscroll, 80, 100);
-			}
-		}
-	}
-	checkCollision(who) {
-		if (who.y < (this.y + 100 + yscroll) &&
-			who.y > (this.y - 1 + yscroll) &&
-			who.x > (this.x + 20 + xscroll) &&
-			who.x < (this.x + (this.w - 20) + xscroll)
-		) {
-			fill(255, 0, 0, 80);
-			this.hit = true;
+    constructor() {
+        this.x = random(windowWidth);
+        this.y = random(windowHeight);
+        this.len = round(random(3, 15));
+        this.totLen = (this.len*80);
+        this.id=0;
+        console.log(this.id + ":id, " + this.totLen + ": len");
+    }
+    make() {
+        for (i = 0; i < this.len; i++) {
+            if (i == 0) {
+                image(rock[0], this.x , this.y, 80, 100);
+            }
+            if (i > 0 && i < this.len - 1) {
+                image(rock[1], this.x + (i * 80), this.y, 80, 100);
+            }
+            if (i > this.len - 1) {
+                image(rock[2], this.x + (i * 80), this.y, 80, 100);
+            }
+        }
+    }
+    checkCollision() {
+       // image(rock[this.type], this.x + xscroll, this.y +yscroll + 50, 81, 100);
+        
+       if (player.y < (this.y + 100 + yscroll) &&
+            player.y > (this.y - 1 + yscroll) &&
+            player.x > (this.x + xscroll) &&
+            player.x < (this.x + this.totLen + xscroll)
+        ) {
+            //fill(255, 0, 0, 80);
+            this.hit = true;
             hitName = this.id;
-            if(who==enemy){this.enemyHit=true;console.log("ENEMYHIT");enemyHitName=this.id;}
-			who.ny = 0;
-			who.vy = 0;
-			who.y = this.y + yscroll;
-		} else {
+            player.ny = 0;
+            player.vy = 0;
+
+            //player.y-=30; // husk å endre til gravity
+            player.y = this.y +(this.totLen/2)+ yscroll;
+            //rect(this.x + xscroll, this.y + yscroll + 50, 81, 100); // setter en rød firkant på den klossen du er på
+        } else {
             this.hit = false;
-           // this.enemyHit=false;
-		}
-	}
-
+        }
+    }
 }
-
-function makeLvl() {
-	for (i = 0; i < nrBlocks; i++) {
-		blocks.push(new Block);
-		if (i > 0) {
-			blocks[i].w = blocks[i].len * 80;
-			blocks[i].x = blocks[i - 1].x + blocks[i - 1].w + random(100);
-		} else {
-			blocks[i].w = blocks[i].len * 80;
-			blocks[i].x = 50;
-		}
-
-		if (i == 0) {
-			blocks[i].y =(windowHeight/2)-10;
-		} else {
-			blocks[i].y = prevY + (random(400) - 150);
-		}
-		blocks[i].id = i;
-		var prevY = blocks[i].y;
-	}
-}
-function drawAndMoveBlocks() {
-
-	for (i = 0; i < nrBlocks; i++) {
-		blocks[i].show();
-		fill(255, 0, 0, 80);
-	}
-}
-
-// //OLD:
 // class Ground {
 //     constructor() {
 //         this.x = random(windowWidth / 81) * 81;
@@ -212,29 +177,6 @@ function drawAndMoveBlocks() {
 //         }
 //     }
 // }
-// function makeLevel(){
-//     for(i=0;i<300;i++){
-//         grnd.pop();
-//     }
-//     for (i = 0; i < 300; i++) {
-//         grnd.push(new Ground);
-//         grnd[i].id = i;
-//         grnd[i].type = i % 3;
-        
-//         if (i < 150) {
-//             if(i%3==0){
-//                 var r = random( 40)+1;
-               
-//             }
-//             grnd[i].y = 200 + round((i - 1) / 3) * r; // +(i*10);
-//             grnd[i].x = 0 + (i * 81);
-//         } else {
-//             grnd[i].y = 600 + round((i - 1) / 3) * -30 //-(i*2);
-//             grnd[i].x = -800 + (i * 81);
-//         }
-//     }
-// }
-
 // ################ HER ER PLAYER KLASSEN. ALL INFO OG FUNKSJONER.. ###################
 class Player {
     constructor() {
@@ -270,12 +212,10 @@ class Player {
             fallcount ++;
            
             if(fallcount>50){
-                makeLvl();
-                player.y = windowHeight/2;
-                player.x = 100;
+                player.y = grnd[0].y;
+                player.x = grnd[0].x;
                 xscroll=0;
                 yscroll=0;
-
             }
 
         } else {
@@ -432,79 +372,23 @@ class Player {
 
 class Enemy {
     constructor() {
-        this.x = 200 ;
-        this.y = 200;
+        this.x = 800;
+        this.y = 300;
         this.jmpy = 0;
         this.counter = 0;
         this.speed = 5;
         this.img = enemy[0];
         this.left = false;
-        this.falling=false;
-        this.vx = 0;
-        this.vy = 0;
-        this.nx = 0;
-        this.ny = 0;
-        this.maxVelocity = 40;
-        this.friction = 0.5;
-        this.fallspeed = 10;
-        this.left=false;
-
     }
-    show() {
-        this.move();
-        image(this.img,this.x,this.y,50,50);
-       
-    }
-     //GÅFUNKSJONEN
-     move() {
-        
-        // this.vx += this.nx;
-        // this.vy += this.ny;
-
-        // this.vx *= this.friction;
-        // this.vy *= this.friction;
-
-        // this.x += this.vx;
-        // this.y += this.vy;
-        this.vx+=this.nx;
-        this.vy+=this.ny;
-
-        this.x=xscroll+this.vx;
-        this.y=yscroll+this.vy;
-        
+    move() {
         if (this.x > player.x) {
             this.left = true;
-            this.nx-=1;
+            this.x -= this.speed;
         } else {
             this.left = false;
-            this.nx +=1;
-            
+            this.x += this.speed;
         }
-
-
-
-         for (i = 0; i < nrBlocks; i++) {
-             blocks[i].checkCollision(this);
-             grndHitEnemy[i] = blocks[i].enemyHit;
-         }
-         if (grndHitEnemy.includes(true)) {
-            this.vy=0;
-            this.nx=0;
-            this.y=blocks[enemyHitName].y;
-          
-         } else{
-            this.ny +=2;
-         }
-
-         
-        
-        //this.y += this.vy;
-
-        
-    
-
     }
-      
 
 }
 
@@ -519,12 +403,22 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     frameRate(20);
     player = new Player;
-    blocks[0] = new Block;
-    enemy = new Enemy;
     //console.log(blocks.length);
    
-    // makeLevel();
-    makeLvl();
+    for (i = 0; i < 20; i++) {
+        grnd.push(new Block);
+        
+        grnd[i].id = i;
+       
+        //grnd[i].type = i % 3;
+        
+        
+                var r = random( 100)-50;
+               
+            grnd[i].y = 200 + r; // +(i*10);
+            grnd[i].x = 0 + (i * 80);
+          
+    }
     song[0].loop();
 }
 
@@ -536,35 +430,21 @@ function setup() {
 // #################### DRAW ######################
 
 function draw() {
+
     // kan bruke scale(0.5); for å få ting til å bli mindre
     background(0); 
-    
     //console.log(boost);
     image(bg[2], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);
     fill(255);
-    text("Platform number: " + String(hitName), windowWidth / 2, 50);
-    if(hitName>hiScore){
-        hiScore=hitName;
+    text("Du står på brikke nr: " + String(round((hitName+2)/3)), windowWidth / 2, 50);
+    if(round((hitName+2)/3)>hiScore){
+        hiScore=round((hitName+2)/3);
     }
     text("Hiscore: " + hiScore, windowWidth / 2, 40);
     scale(0.5);
    // background(122, 90, 18);
   
-   drawAndMoveBlocks();
-   enemy.show();
-
-   
-   for (i = 0; i < nrBlocks; i++) {
-       blocks[i].checkCollision(player);
-       grndHit[i] = blocks[i].hit;
-   }
-   if (grndHit.includes(true)) {
-    falling = false;
-} else {
-    falling = true;
-}
-
-
+ 
     noStroke();
 
     // for(i=0;i<(windowWidth/80);i++){ // lager bakgrunnsbildet rett bortover.
@@ -576,16 +456,17 @@ function draw() {
     
     //for(i=0;i<blocks.length;i++){blocks[i].make();}
 
-    // for (i = 0; i < grnd.length; i++) { // lager bakgrunnsbildet.
-    //     grnd[i].checkCollision();
-    //     grndHit[i] = grnd[i].hit;
+    for (i = 0; i < grnd.length; i++) { // lager bakgrunnsbildet.
+        grnd[i].checkCollision();
+        grndHit[i] = grnd[i].hit;
+        grnd[i].make();
 
-    // }
-    // if (grndHit.includes(true)) {
-    //     falling = false;
-    // } else {
-    //     falling = true;
-    // }
+    }
+    if (grndHit.includes(true)) {
+        falling = false;
+    } else {
+        falling = true;
+    }
 
 
 
@@ -593,7 +474,7 @@ function draw() {
 
     //####### HER KOMMER KONTROLLENE FOR Å STYRE SPILLERN  ##########////////////
     //check all controls:
-    if (keyIsDown(UP_ARROW) || keyIsDown(LEFT_ARROW) || keyIsDown(RIGHT_ARROW) || keyIsDown(DOWN_ARROW) || keyIsDown(17) || keyIsDown(16) || touchON) {
+    if (keyIsDown(UP_ARROW) || keyIsDown(LEFT_ARROW) || keyIsDown(RIGHT_ARROW) || keyIsDown(DOWN_ARROW) || keyIsDown(17) || keyIsDown(16) || mouseIsPressed) {
         pressed = true;
     } else {
         if (!falling) { player.static(); }
@@ -696,7 +577,7 @@ function draw() {
    }
 
     if (mouseIsPressed) {
-        touchON=true;
+
         // if(mouseY<player.y){
         //    player.jump();
         // }
@@ -746,7 +627,6 @@ function draw() {
 }
 
 function touchStarted(event) {
-    if(event.touches){
 	if(event.touches[0]){
 		touchON=true;
 			
@@ -756,7 +636,6 @@ function touchStarted(event) {
 	}
 	return false;
   }
-}
 
 
 function touchEnded(event){
@@ -771,5 +650,5 @@ function touchEnded(event){
 }
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-    if(player){player.y = blocks[hitName].y;}
+    if(player){player.y = grnd[hitName].y;}
 }
