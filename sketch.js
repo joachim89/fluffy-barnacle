@@ -18,6 +18,8 @@ let jump = false;
 let pogo = false;
 let fallcount =0;
 let boost = 0;
+let touchON=false;
+let touchON2=false;
 
 //scroller
 let xscroll = 0;
@@ -185,7 +187,8 @@ class Player {
                 this.img = playerJump[1];
             }
             fallcount ++;
-            if(fallcount>100){
+           
+            if(fallcount>50){
                 player.y = grnd[0].y;
                 player.x = grnd[0].x;
                 xscroll=0;
@@ -225,9 +228,9 @@ class Player {
         this.vx *= this.friction;
         this.vy *= this.friction;
 
-        if (this.x < (windowWidth / 2) - 100 && ( keyIsDown(LEFT_ARROW)||(mouseIsPressed && mouseX<(windowWidth/3)))) {
+        if (this.x < (windowWidth / 2) - 100 && ( keyIsDown(LEFT_ARROW)||(touchON && mouseX<(windowWidth/3)))) {
             xscroll -= this.vx;
-        } else if (this.x > (windowWidth / 2) + 100 && (keyIsDown(RIGHT_ARROW) || (mouseIsPressed && mouseX>(windowWidth-(windowWidth/3))))) {
+        } else if (this.x > (windowWidth / 2) + 100 && (keyIsDown(RIGHT_ARROW) || (touchON && mouseX>(windowWidth-(windowWidth/3))))) {
             xscroll -= this.vx;
         } else {
             this.x += this.vx;
@@ -397,7 +400,7 @@ function setup() {
             grnd[i].x = -800 + (i * 81);
         }
     }
-    //song[0].loop();
+    song[0].loop();
 }
 
 
@@ -410,7 +413,7 @@ function setup() {
 function draw() {
     // kan bruke scale(0.5); for å få ting til å bli mindre
     background(0); 
-    console.log(boost);
+    //console.log(boost);
     image(bg[2], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);
     fill(255);
     text("Du står på brikke nr: " + String(round((hitName+2)/3)), windowWidth / 2, 50);
@@ -494,32 +497,8 @@ function draw() {
         player.lookdown();
     }
     //muskontroller og mobil
-    if (mouseIsPressed) {
 
-        // if(mouseY<player.y){
-        //    player.jump();
-        // }
-        // if (mouseX < player.x) {
-        //     right = false;
-        // } else {
-        //     right = true;
-        // }
-        // if (abs(player.x - mouseX) > abs(player.y - mouseY)) {
-        //     if (mouseX < player.x) {
-
-        //          player.move("left");
-        //     } else {
-
-        //         player.move("right");
-        //     }
-        // } else {
-        //     if (mouseY < player.y && canJump) {
-        //         jump=true;
-        //     } else if(mouseY>player.y){
-
-        //         player.lookdown();
-        //     }
-        // }
+    if(touchON){
         if(mouseX<windowWidth/3 ){
             if(mouseY<windowHeight/3){
                 if(canJump){
@@ -565,6 +544,46 @@ function draw() {
 
             }
         }
+        if(!touchON2){
+           //ACTIONS FOR PRESSING FIRST BUTTON
+           
+       }else{
+           //ACTIONS FOR TWO BUTTONS PRESSED
+          if(canJump){
+              jump = true;
+          }
+       }
+   }
+
+    if (mouseIsPressed) {
+
+        // if(mouseY<player.y){
+        //    player.jump();
+        // }
+        // if (mouseX < player.x) {
+        //     right = false;
+        // } else {
+        //     right = true;
+        // }
+        // if (abs(player.x - mouseX) > abs(player.y - mouseY)) {
+        //     if (mouseX < player.x) {
+
+        //          player.move("left");
+        //     } else {
+
+        //         player.move("right");
+        //     }
+        // } else {
+        //     if (mouseY < player.y && canJump) {
+        //         jump=true;
+        //     } else if(mouseY>player.y){
+
+        //         player.lookdown();
+        //     }
+        // }
+
+
+      
 
 
 
@@ -579,19 +598,35 @@ function draw() {
     player.show();
     fill(255);
    
-
+    
     //###############################################
     textAlign(CENTER);
     fill(0);
     text(vernr, windowWidth / 2, 100)
 }
+
 function touchStarted(event) {
-	//console.log(event);
-	if(event.touches){if(event.touches.length>1){
-		console.log("TO TRYKK!");
-	}}
+	if(event.touches[0]){
+		touchON=true;
+			
+	}
+	if(event.touches[1]){
+		touchON2=true;
+	}
+	return false;
   }
 
+
+function touchEnded(event){
+	if(touchON){
+		if(!touchON2){
+			touchON=false;
+		}else{
+			touchON2=false;
+		}
+	}
+	return false;
+}
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
     if(player){player.y = grnd[hitName].y;}
