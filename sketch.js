@@ -43,12 +43,14 @@ let playerStatic;
 let playerStaticl;
 let playerLookDown = [];
 let playerLookUp;
+let playerDead;
 let playerPogo = [];
 let playerPogol = [];
 let enemy = [];
 let enemyl = [];
 let rock = [];
 let potion;
+
 
 function preload() {
     playerWalk[0] = loadImage("imgs/moves/walk1.png");
@@ -74,6 +76,7 @@ function preload() {
     playerPogo[1] = loadImage("imgs/moves/pogo2.png");
     playerPogol[0] = loadImage("imgs/moves/pogo1l.png");
     playerPogol[1] = loadImage("imgs/moves/pogo2l.png");
+    playerDead = loadImage("imgs/moves/dead.png");
     ground = loadImage("imgs/ground.png");
 
     rock[0] = loadImage("imgs/grnd/rock1.png");
@@ -164,7 +167,9 @@ function makeLvl() {
 		}
 
 		if (i == 0) {
-			blocks[i].y =(windowHeight/2)-10;
+            blocks[0].len=15;
+            blocks[0].w = blocks[i].len * 80;
+			blocks[0].y =(windowHeight/2)-10;
 		} else {
 			blocks[i].y = prevY + (random(400) - 150);
 		}
@@ -268,7 +273,9 @@ class Player {
                 this.img = playerJump[1];
             }
             fallcount ++;
-           
+           if(fallcount>20){
+               this.img = playerDead;
+           }
             if(fallcount>50){
                 makeLvl();
                 player.y = windowHeight/2;
@@ -447,14 +454,33 @@ class Enemy {
         this.maxVelocity = 40;
         this.friction = 0.5;
         this.fallspeed = 10;
-        this.left=false;
+        this.left;
+        this.xmov=0;
 
     }
     show() {
-        this.move();
+        this.bnf();
         image(this.img,this.x,this.y,50,50);
        
     }
+    bnf (){
+        this.x=blocks[4].x + this.xmov + xscroll;
+        this.y =blocks[4].y + yscroll;
+        console.log(this.x + "thisx \n" +(blocks[4].x+blocks[4].w+this.xmov+xscroll ) + " x" );
+        if((this.x>(blocks[4].x+blocks[4].w+xscroll ))){
+            this.left=true;
+        }
+        if((this.x<(blocks[4].x+xscroll))){
+            this.left=false;
+        }
+        if(this.left){
+            this.xmov-=10;
+
+        }else{
+            this.xmov+=10;
+        }
+    }
+
      //GÅFUNKSJONEN
      move() {
         
