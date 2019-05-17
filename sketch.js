@@ -7,9 +7,7 @@ let block;
 let blocks = [];
 let hiScore = 0;
 let nrBlocks = 50;
-var hisc = 0;
 
-let scores = [];
 let bg = [];
 let groundY;
 let hitName;
@@ -139,8 +137,8 @@ class Block {
 	checkCollision(who) {
 		if (who.y < (this.y + 100 + yscroll) &&
 			who.y > (this.y - 1 + yscroll) &&
-			who.x > (this.x + 20 + xscroll) &&
-			who.x < (this.x + (this.w - 20) + xscroll)
+			who.x > (this.x -45 + xscroll) &&
+			who.x < (this.x + (this.w - 50) + xscroll)
 		) {
 			fill(255, 0, 0, 80);
 			this.hit = true;
@@ -554,11 +552,7 @@ function setup() {
     blocks[0] = new Block;
     enemy = new Enemy;
     //console.log(blocks.length);
-    scores = loadStrings("scores.txt");
-    console.log(scores);
-    scores.push("22");
-    console.log(scores);
-    saveStrings(scores,"scores.txt");
+   
     // makeLevel();
     makeLvl();
     song[0].loop();
