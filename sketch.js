@@ -687,13 +687,10 @@ function draw() {
                 }
                 player.move("left");
             }
-            if(mouseY>windowHeight/3 && mouseY < windowHeight-(windowHeight/3)){
+            if(mouseY>windowHeight/3 ){
                 player.move("left");
             }
-            if(mouseY>windowHeight-(windowHeight/3)){
-                player.lookdown();
-
-            }
+            
 
         }
         if(mouseX>windowWidth/3 && mouseX < windowWidth-(windowWidth/3)){
