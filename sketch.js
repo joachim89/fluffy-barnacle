@@ -7,7 +7,9 @@ let block;
 let blocks = [];
 let hiScore = 0;
 let nrBlocks = 50;
+var hisc = 0;
 
+let scores = [];
 let bg = [];
 let groundY;
 let hitName;
@@ -444,7 +446,7 @@ class Enemy {
         this.jmpy = 0;
         this.counter = 0;
         this.speed = 5;
-        this.img = enemy[0];
+        this.img = enemyl[0];
         this.left = false;
         this.falling=false;
         this.vx = 0;
@@ -459,25 +461,29 @@ class Enemy {
 
     }
     show() {
+
         this.bnf();
-        image(this.img,this.x,this.y,50,50);
        
+        image(this.img,this.x,this.y+50,50,50);
+      
     }
     bnf (){
         this.x=blocks[4].x + this.xmov + xscroll;
-        this.y =blocks[4].y + yscroll;
-        console.log(this.x + "thisx \n" +(blocks[4].x+blocks[4].w+this.xmov+xscroll ) + " x" );
-        if((this.x>(blocks[4].x+blocks[4].w+xscroll ))){
+        this.y =blocks[4].y + yscroll ;
+       // console.log(this.x + "thisx \n" +(blocks[4].x+blocks[4].w+this.xmov+xscroll ) + " x" );
+        if((this.x>(blocks[4].x+blocks[4].w-50+xscroll ))){
             this.left=true;
         }
-        if((this.x<(blocks[4].x+xscroll))){
+        if((this.x<(blocks[4].x+50+xscroll))){
             this.left=false;
         }
         if(this.left){
             this.xmov-=10;
-
+           // this.img = enemyl[0];
+        
         }else{
             this.xmov+=10;
+          //  this.img = enemy[0];
         }
     }
 
@@ -548,7 +554,11 @@ function setup() {
     blocks[0] = new Block;
     enemy = new Enemy;
     //console.log(blocks.length);
-   
+    scores = loadStrings("scores.txt");
+    console.log(scores);
+    scores.push("22");
+    console.log(scores);
+    saveStrings(scores,"scores.txt");
     // makeLevel();
     makeLvl();
     song[0].loop();
@@ -566,7 +576,7 @@ function draw() {
     background(0); 
     
     //console.log(boost);
-    image(bg[2], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);
+    image(bg[0], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);
     fill(255);
     text("Platform number: " + String(hitName), windowWidth / 2, 50);
     if(hitName>hiScore){
