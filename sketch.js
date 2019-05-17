@@ -6,7 +6,7 @@ let grndHitEnemy = [];
 let block;
 let blocks = [];
 let hiScore = 0;
-let nrBlocks = 50;
+let nrBlocks = 100;
 
 let bg = [];
 let groundY;
@@ -87,6 +87,8 @@ function preload() {
     bg[1] = loadImage("imgs/bg1.png");
     bg[2] = loadImage("imgs/bg2.gif");
 
+    finish = loadImage("imgs/finish.png");
+
     potion = loadImage("imgs/potion.png");
 
     enemy[0] = loadImage("imgs/enemies/ball1.png");
@@ -119,6 +121,7 @@ class Block {
         this.hit = false;
         this.enemyHit=false;
         this.shift = 50;
+        this.finishBlock=false;
 
 	}
 	show() {
@@ -127,10 +130,14 @@ class Block {
 				image(rock[0], this.x + xscroll, this.y + this.shift + yscroll, 80, 100);
 			}
 			if (a > 0 && a < this.len - 1) {
-				image(rock[1], this.x + (a * 80) + xscroll, this.y + this.shift +yscroll, 80, 100);
-			}
+                image(rock[1], this.x + (a * 80) + xscroll, this.y + this.shift +yscroll, 80, 100);
+              	
+            }
 			if (a == this.len - 1) {
-				image(rock[2], this.x + (a * 80) + xscroll, this.y + this.shift +yscroll, 80, 100);
+                image(rock[2], this.x + (a * 80) + xscroll, this.y + this.shift +yscroll, 80, 100);
+                if(this.finishBlock){
+                    image(finish,this.x + (a * 80) -200 + xscroll, this.y -200  +yscroll, 300, 300);
+                }	
 			}
 		}
 	}
@@ -158,13 +165,17 @@ class Block {
 function makeLvl() {
 	for (i = 0; i < nrBlocks; i++) {
 		blocks.push(new Block);
-		if (i > 0) {
+		if (i > 0 && i<nrBlocks-1) {
 			blocks[i].w = blocks[i].len * 80;
-			blocks[i].x = blocks[i - 1].x + blocks[i - 1].w + random(100);
-		} else {
+			blocks[i].x = blocks[i - 1].x + blocks[i - 1].w + random(200);
+		} else if(i==0){
 			blocks[i].w = blocks[i].len * 80;
 			blocks[i].x = 50;
-		}
+		}else if(i==nrBlocks-1){
+            blocks[i].w = blocks[i].len * 80;
+            blocks[i].x = blocks[i - 1].x + blocks[i - 1].w + random(200);
+            blocks[i].finishBlock=true;
+        }
 
 		if (i == 0) {
             blocks[0].len=15;
