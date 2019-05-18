@@ -6,11 +6,21 @@ let grndHitEnemy = [];
 let block;
 let blocks = [];
 let hiScore = 0;
-let nrBlocks = 20;
-let nrEnemies= 2;
 let enemies = [];
 let lvlnr = 0;
 let canMove = true;
+let vivas = [];
+let vivasimg=[];
+let vivCounter = 0;
+let points = 0; 
+let v = 0;
+
+/// Lengde, antall monstre og antall vivas
+let nrBlocks = 20; //antall platformer per lvl
+let nrEnemies= 2;  //antall monstre
+let nrVivas = 20; //antall vivas
+
+
 
 let bg = [];
 let groundY;
@@ -115,6 +125,10 @@ function preload() {
     enemyl[2] = loadImage("imgs/enemies/enl3.png");
     enemyl[3] = loadImage("imgs/enemies/enl4.png");
 
+    vivasimg[0] = loadImage("imgs/vivas1.png");
+    vivasimg[1] = loadImage("imgs/vivas2.png");
+    vivasimg[2] = loadImage("imgs/vivas3.png");
+
 
     //sounds
     song[0] = loadSound("sounds/oasis.mp3");
@@ -122,6 +136,7 @@ function preload() {
 
     walksnd = loadSound("sounds/walk2.mp3");
     jumpsnd = loadSound("sounds/jump.mp3");
+    vivsnd = loadSound("sounds/vivas.mp3");
     deadsnd = loadSound("sounds/dead.mp3");
     levelcompsnd = loadSound("sounds/levelcomplete.mp3");
 }
@@ -204,7 +219,14 @@ function makeLvl() {
 		}
 		blocks[i].id = i;
 		var prevY = blocks[i].y;
-	}
+    }
+    if(vivas.length>0){
+    for(v = 0; v<nrVivas;v++){   
+        vivas[v].v=true;
+        vivas[v].x2=random(500);
+        vivas[v].y2=random(150);
+     }
+    }
 }
 function drawAndMoveBlocks() {
 
@@ -333,7 +355,7 @@ class Player {
         player.gravity();
         image(this.img, this.x, this.y, this.w, this.h);
         if (pogo) {
-            player.pogo();
+           // player.pogo();
         }
     }
 
@@ -488,6 +510,37 @@ function nextLevel(){
         yscroll=0;
         
 }
+
+
+class Vivas {
+    constructor(){
+        this.x = random(500);
+        this.y = random(150);
+        this.x2 = random(500);
+        this.y2 = random(150);
+        this.v = true;
+        this.blocknr = round(random(nrBlocks));
+
+
+        
+    }
+    show(){
+        this.x=blocks[this.blocknr].x + xscroll+ this.x2;
+        this.y =blocks[this.blocknr].y + yscroll -this.y2 + (sin(vivCounter+this.x2)*5) ;
+        if(this.v){
+           image(vivasimg[vivCounter % 3],this.x,this.y,50,50);
+         }
+         this.hit();
+    }
+    hit(){
+        if(player.x > this.x-70&&player.x<this.x+50 &&player.y<this.y+60&&player.y>this.y-60&&this.v){
+            this.v=false;
+            vivsnd.play();
+            points++;
+            console.log(points);
+        }
+    }
+}
 class Enemy {
     constructor() {
         this.x = 200 ;
@@ -623,6 +676,9 @@ function setup() {
     for(i=0;i<nrEnemies;i++){
         enemies.push(new Enemy);
     }
+    for(v=0; v<nrVivas;v++){
+    vivas.push(new Vivas);
+}
     //console.log(blocks.length);
    
     // makeLevel();
@@ -655,10 +711,23 @@ function draw() {
     background(0); 
    //console.log(document.visibilityState);
 
-   document.addEventListener("visibilitychange", function() {
-    //console.log(document.hidden, document.visibilityState);
-    startStop();
-  }, false);
+//    document.addEventListener("visibilitychange", function() {
+//     //console.log(document.hidden, document.visibilityState);
+//     startStop();
+//   }, false);
+
+
+  window.addEventListener('blur', function(){
+    
+    song[0].stop();
+ }, false);
+ 
+ window.addEventListener('focus', function(){
+    if(!song[0].isPlaying()){
+        song[0].play();
+    }
+ }, false);
+
 
     //console.log(boost);
     if(bg[lvlnr]){image(bg[lvlnr], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{console.log("NO BG!");}
@@ -668,6 +737,7 @@ function draw() {
         hiScore=hitName + ((lvlnr) * nrBlocks);
     }
     text("Hiscore: " + hiScore, windowWidth / 2, 40);
+    text("Vivas: " + points,windowWidth/2,60);
    
     scale(0.5);
    // background(122, 90, 18);
@@ -677,7 +747,10 @@ function draw() {
    for(var e=0;e<nrEnemies;e++){
        enemies[e].show();
    }
-   
+   for(v = 0; v<nrVivas;v++){   
+       vivas[v].show();
+    }
+    vivCounter++;
    for (i = 0; i < nrBlocks; i++) {
        blocks[i].checkCollision(player);
        grndHit[i] = blocks[i].hit;
