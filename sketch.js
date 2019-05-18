@@ -21,8 +21,8 @@ let points = 0;
 let v = 0;
 
 /// Lengde, antall monstre og antall vivas
-let nrBlocks = 20; //antall platformer per lvl
-let nrEnemies= 2;  //antall monstre
+let nrBlocks = 5; //antall platformer per lvl
+let nrEnemies= 0;  //antall monstre
 let nrVivas = 20; //antall vivas
 
 
@@ -174,6 +174,7 @@ class Block {
                 image(rock[2], this.x + (a * 80) + xscroll, this.y + this.shift +yscroll, 80, 100);
                 if(this.finishBlock){
                     image(finish,this.x + (a * 80) -200 + xscroll, this.y -200  +yscroll, 300, 300);
+                    
                 }	
 			}
 		}
@@ -506,7 +507,7 @@ class Player {
     //FUNKSJON FOR BARE Å STÅ STILLE OG NULLSTILLE TELLERE OG INSTILLINGER
     static() {
 
-
+       
     }
 
 }
@@ -795,6 +796,10 @@ function draw() {
     text("Your hightest score: " + hiScore, windowWidth / 2, 40);
     text("Vivas: " + points,windowWidth/2,60);
    
+
+
+
+    push();
     //sjekker om du er mobil eller ei
     if(window.mobilecheck = function() {
         var check = false;
@@ -827,7 +832,9 @@ function draw() {
 
 
     noStroke();
-
+   
+    
+ 
     // for(i=0;i<(windowWidth/80);i++){ // lager bakgrunnsbildet rett bortover.
     //     image(ground,80*i,groundY,80,188);
     // }
@@ -993,8 +1000,13 @@ function draw() {
 
     player.show();
     fill(255);
-   
-    
+   pop();
+    if(hitName == nrBlocks-1){
+        if(lvlnr<2){
+            text("LOOK UP TO ENTER THE NEXT LEVEL!", windowWidth/2,80);
+        }
+    }
+
     //###############################################
     textAlign(CENTER);
     fill(0);
