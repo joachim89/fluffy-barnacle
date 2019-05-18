@@ -21,9 +21,9 @@ let points = 0;
 let v = 0;
 
 /// Lengde, antall monstre og antall vivas
-let nrBlocks = 5; //antall platformer per lvl
-let nrEnemies= 0;  //antall monstre
-let nrVivas = 20; //antall vivas
+let nrBlocks = 25; //antall platformer per lvl
+let nrEnemies= 2;  //antall monstre
+let nrVivas = 10; //antall vivas
 
 
 
