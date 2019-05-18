@@ -18,6 +18,7 @@
   "homepage": "https://github.com/joachim89/fluffy-barnacle#readme",
   "dependencies": {
     "finalhandler": "^1.1.1",
+    "firebase": "^6.0.2",
     "serve-static": "^1.13.2"
   }
 }

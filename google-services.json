@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1084551153146",
+    "firebase_url": "https://fluffy-barnicle.firebaseio.com",
+    "project_id": "fluffy-barnicle",
+    "storage_bucket": "fluffy-barnicle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084551153146:android:c35d06f26fc13ac4",
+        "android_client_info": {
+          "package_name": "com.phonegap.keen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084551153146-utnei4eebv52m9khhviekb9m35id3use.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATHFhQ2oxCi0Hkloc6J2_gF3aotrkCL1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084551153146-utnei4eebv52m9khhviekb9m35id3use.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
