@@ -14,7 +14,7 @@ let canMove = true;
 
 let bg = [];
 let groundY;
-let hitName;
+let hitName = 0;
 let enemyHitName;
 let pressed;
 let button;
@@ -34,7 +34,7 @@ let xscroll = 0;
 let yscroll = 0;
 
 //versjonsnr, for å sjekke om ting blir oppdatert.
-let vernr = "0.0.0.3";
+let vernr = "0.0.0.4";
 //sound vars
 let song = [];
 let jumpsnd;
@@ -508,6 +508,9 @@ class Enemy {
         this.left;
         this.xmov=0;
         this.blocknr = round(random(nrBlocks-3)+1);
+        if(blocks[this.blocknr].len < 4){
+            this.blocknr = round(random(nrBlocks-3)+1);
+        }
 
     }
     show() {
@@ -516,14 +519,18 @@ class Enemy {
         this.hitPlayer();
         image(this.img,this.x,this.y,100,100);
         this.counter++;
+        if(blocks[this.blocknr].len < 4){
+            this.blocknr = round(random(nrBlocks-3)+1);
+        }
       
     }
     hitPlayer(){
-        if(player.x > this.x - 100 && player.x < this.x + 100 && player.y < this.y +50 && player.y>this.y-50){
+        if(player.x > this.x - 50 && player.x < this.x + 50 && player.y < this.y +50 && player.y>this.y-50){
             console.log("DEAD");
             canMove=false;
-            
-            deadsnd.play();
+            jump = false;
+            deadsnd.playMode("untilDone");
+            if(!deadsnd.isPlaying()){deadsnd.play();}
             player.y+=120;
         }
     }
@@ -612,14 +619,14 @@ function setup() {
     frameRate(20);
     player = new Player;
     blocks[0] = new Block;
-    
+    makeLvl();
     for(i=0;i<nrEnemies;i++){
         enemies.push(new Enemy);
     }
     //console.log(blocks.length);
    
     // makeLevel();
-    makeLvl();
+   
     song[0].loop();
    
    
