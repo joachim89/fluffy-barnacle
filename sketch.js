@@ -6,16 +6,18 @@ let grndHitEnemy = [];
 let block;
 let blocks = [];
 let hiScore = 0;
-let nrBlocks = 5;
-let nrEnemies= 1;
+let nrBlocks = 50;
+let nrEnemies= 8;
 let enemies = [];
 let lvlnr = 0;
+let canMove = true;
 
 let bg = [];
 let groundY;
 let hitName;
 let enemyHitName;
 let pressed;
+let button;
 //vars til spillerbevegelser
 let right = false; //går til høyre eller venstre?
 let falling = true; //faller?
@@ -120,6 +122,8 @@ function preload() {
 
     walksnd = loadSound("sounds/walk2.mp3");
     jumpsnd = loadSound("sounds/jump.mp3");
+    deadsnd = loadSound("sounds/dead.mp3");
+    levelcompsnd = loadSound("sounds/levelcomplete.mp3");
 }
 
 // GROUND
@@ -176,6 +180,7 @@ class Block {
 }
 
 function makeLvl() {
+    canMove=true;
 	for (i = 0; i < nrBlocks; i++) {
 		blocks.push(new Block);
 		if (i > 0 && i<nrBlocks-1) {
@@ -299,6 +304,8 @@ class Player {
             fallcount ++;
            if(fallcount>20){
                this.img = playerDead;
+               deadsnd.playMode("untilDone");
+               if(!deadsnd.isPlaying()){deadsnd.play();}
            }
             if(fallcount>50){
                 makeLvl();
@@ -457,13 +464,9 @@ class Player {
         ///LAST TILE THING
         if(hitName == nrBlocks-1){
             console.log("CONGRATS");
-            lvlnr +=1;
-            hitName=0;
-            makeLvl();
-                player.y = windowHeight/2;
-                player.x = 100;
-                xscroll=0;
-                yscroll=0;
+            canMove=false;
+            levelcompsnd.play();
+            setTimeout(nextLevel, 2000 );
                 
         }
     }
@@ -474,7 +477,17 @@ class Player {
     }
 
 }
-
+function nextLevel(){
+    lvlnr +=1;
+    hitName=0;
+    
+    makeLvl();
+        player.y = windowHeight/2;
+        player.x = 100;
+        xscroll=0;
+        yscroll=0;
+        
+}
 class Enemy {
     constructor() {
         this.x = 200 ;
@@ -494,7 +507,7 @@ class Enemy {
         this.fallspeed = 10;
         this.left;
         this.xmov=0;
-        this.blocknr = round(random(nrBlocks));
+        this.blocknr = round(random(nrBlocks-3)+1);
 
     }
     show() {
@@ -508,8 +521,9 @@ class Enemy {
     hitPlayer(){
         if(player.x > this.x - 100 && player.x < this.x + 100 && player.y < this.y +50 && player.y>this.y-50){
             console.log("DEAD");
-            player.canJump=false;
+            canMove=false;
             
+            deadsnd.play();
             player.y+=120;
         }
     }
@@ -607,12 +621,25 @@ function setup() {
     // makeLevel();
     makeLvl();
     song[0].loop();
+   
+   
+    // button = createButton('MUTE/\nUNMUTE');
+    // button.position(windowWidth/2, windowHeight-(windowHeight/4));
+    // button.mousePressed(startStop);
 }
 
 
 
 
+function startStop(){
 
+    if (song[0].isPlaying()) {
+        // .isPlaying() returns a boolean
+        song[0].stop();
+      } else {
+        song[0].play();
+      }
+}
 
 // #################### DRAW ######################
 
@@ -628,6 +655,7 @@ function draw() {
         hiScore=hitName + ((lvlnr) * nrBlocks);
     }
     text("Hiscore: " + hiScore, windowWidth / 2, 40);
+   
     scale(0.5);
    // background(122, 90, 18);
   
@@ -676,6 +704,7 @@ function draw() {
 
     //####### HER KOMMER KONTROLLENE FOR Å STYRE SPILLERN  ##########////////////
     //check all controls:
+    if(canMove){
     if (keyIsDown(UP_ARROW) || keyIsDown(LEFT_ARROW) || keyIsDown(RIGHT_ARROW) || keyIsDown(DOWN_ARROW) || keyIsDown(17) || keyIsDown(16) || touchON) {
         pressed = true;
     } else {
@@ -736,12 +765,12 @@ function draw() {
 
         }
         if(mouseX>windowWidth/3 && mouseX < windowWidth-(windowWidth/3)){
-            if(mouseY<windowHeight/3){
+            if(mouseY<windowHeight/4){
                 if(canJump){
                     jump = true;
                 }
             }
-            if(mouseY>windowHeight/3 && mouseY < windowHeight-(windowHeight/3)){
+            if(mouseY>windowHeight/4 && mouseY < windowHeight-(windowHeight/3)){
                 player.lookup();
             }
             if(mouseY>windowHeight-(windowHeight/3)){
@@ -756,13 +785,10 @@ function draw() {
                 }
                 player.move("right");
             }
-            if(mouseY>windowHeight/3 && mouseY < windowHeight-(windowHeight/3)){
+            if(mouseY>windowHeight/3 ){
                 player.move("right");
             }
-            if(mouseY>windowHeight-(windowHeight/3)){
-                player.lookdown();
-
-            }
+           
         }
         if(!touchON2){
            //ACTIONS FOR PRESSING FIRST BUTTON
@@ -808,7 +834,7 @@ function draw() {
 
 
     }
-
+    }
 
 
 
