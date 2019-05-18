@@ -9,6 +9,10 @@
     <script src="lib/p5.js"></script>
     <script src="lib/addons/p5.dom.js"></script>
     <script src="lib/addons/p5.sound.js"></script>
+    
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
   </head>
   <body>
     <div class="container">
@@ -23,8 +27,68 @@
        <a href="game1.html"><b>PLAY NOW!</b></a>
        <br />
        <br />
+       <script>
+       function gotData(data){
+    // console.log(data.val());
+    var dbscores = data.val();
+    var dbkeys = Object.keys(dbscores);
+
+
+
+    
+   // console.log(dbkeys);
+   var poenglist = [];
+    for(var dbi = 0; dbi<dbkeys.length;dbi++){
+        var k = dbkeys[dbi];
+        var name = dbscores[k].name;
+        var dbscore = dbscores[k].score;
+        
+        console.log(name + ": " + dbscore + "p");
+       poenglist.push(name + ": " + dbscore + "p");
+
+    }
+    const pont = document.getElementById("poeng");
+    pont.innerHTML = "<h2>HALL OF FAME:</h2>  <br />";
+    pont.innerHTML += poenglist[0] + "<br />";
+       for(var i = 1; i<poenglist.length;i++){
+        pont.innerHTML += poenglist[i];
+        pont.innerHTML += "<br/>";
+       }
+}
+function errData(err){
+    console.log("Error");
+    console.log(err);
+}
        
+       // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBfAwlHcWXp7d2WFbyxzPe4aa16n7GFp30",
+    authDomain: "fluffy-barnacle.firebaseapp.com",
+    databaseURL: "https://fluffy-barnacle.firebaseio.com",
+    projectId: "fluffy-barnacle",
+    storageBucket: "fluffy-barnacle.appspot.com",
+    messagingSenderId: "747065307498",
+    appId: "1:747065307498:web:5815c34f19da2bb9"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  //console.log(firebase);
+
+  var database = firebase.database();
+  ref = database.ref('scores').orderByChild('/score').limitToFirst(10);
+
+  ref.on('value',gotData,errData);
+
+
+
+
+
+
+  
+       </script> <div id="poeng"></div>'
     </div>
+  
 
 
     

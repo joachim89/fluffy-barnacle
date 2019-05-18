@@ -18,7 +18,7 @@ let vivas = [];
 let vivasimg=[];
 let vivCounter = 0;
 let points = 0; 
-let v = 0;
+//let v = 0;
 
 /// Lengde, antall monstre og antall vivas
 let nrBlocks = 25; //antall platformer per lvl
@@ -227,7 +227,7 @@ function makeLvl() {
 		var prevY = blocks[i].y;
     }
     if(vivas.length>0){
-    for(v = 0; v<nrVivas;v++){   
+    for(var v = 0; v<nrVivas;v++){   
         vivas[v].v=true;
         vivas[v].x2=random(500);
         vivas[v].y2=random(150);
@@ -338,15 +338,19 @@ class Player {
             if(fallcount>50){
                 var data = {
                     name: "Anonymous",
-                    score: hiScore
+                    score: hiScore,
+                    time: Date.now()
                 }
-                ref.push(data);
+               // if(hiScore>dbHi){ref.push(data);}
+               ref.push(data);
                 makeLvl();
+                
                 player.y = windowHeight/2;
                 player.x = 100;
                 xscroll=0;
                 yscroll=0;
                 lvlnr=0;
+                points=0;
 
 
             }
@@ -698,7 +702,22 @@ function errData(err){
     console.log(err);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // #################### SETUP ######################
+
+
 function setup() {
     createCanvas(windowWidth, windowHeight);
     frameRate(20);
@@ -807,7 +826,7 @@ function draw() {
         return check;
       }){
     scale(0.5);}else{
-        scale(0.3);
+        scale(0.2);
     }
    // background(122, 90, 18);
   
@@ -1010,7 +1029,7 @@ function draw() {
     //###############################################
     textAlign(CENTER);
     fill(0);
-    text(vernr, windowWidth / 2, 100)
+   // text(vernr, windowWidth / 2, 100)
 }
 
 function touchStarted(event) {
