@@ -1,11 +1,11 @@
 // COMMANDER KEEN
 
 // Firebase App (the core Firebase SDK) is always required and
-// must be listed before other Firebase SDKs
-var firebase = require("firebase/app");
+// // must be listed before other Firebase SDKs
+// var firebase = require("firebase/app");
 
-// Add the Firebase products that you want to use
-require("firebase/database");
+// // Add the Firebase products that you want to use
+// require("firebase/database");
 
 
 
@@ -674,13 +674,13 @@ class Enemy {
 
 
 
-function writeUserData(userId, name, email, imageUrl) {
-    var scoredatabase = {};
-    scoredatabase.name = "NAVN";
-    scoredatabase.score = random(255);
-   firebase.database().ref('https://fluffy-barnacle.firebaseio.com/').push(scoredatabase);
-    console.log(scoredatabase);
-  }
+// function writeUserData(userId, name, email, imageUrl) {
+//     var scoredatabase = {};
+//     scoredatabase.name = "NAVN";
+//     scoredatabase.score = random(255);
+//    firebase.database().ref('https://fluffy-barnacle.firebaseio.com/').push(scoredatabase);
+//     console.log(scoredatabase);
+//   }
 
 
 // #################### SETUP ######################
@@ -701,7 +701,7 @@ function setup() {
     // makeLevel();
    
     song[0].loop();
-   writeUserData();
+//    writeUserData();
    
     // button = createButton('MUTE/\nUNMUTE');
     // button.position(windowWidth/2, windowHeight-(windowHeight/4));
