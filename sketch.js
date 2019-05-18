@@ -1,7 +1,7 @@
 // COMMANDER KEEN
 
 let ref;
-
+let dbHi;
 
 let player;
 let ground;
@@ -674,7 +674,27 @@ class Enemy {
 
 
 
+function gotData(data){
+    // console.log(data.val());
+    var dbscores = data.val();
+    var dbkeys = Object.keys(dbscores);
+   // console.log(dbkeys);
+    for(var i = 0; i<dbkeys.length;i++){
+        var k = dbkeys[i];
+        var name = dbscores[k].name;
+        var dbscore = dbscores[k].score;
+        console.log(name + ": " + dbscore + "p");
+        if(dbscore > hiScore){
+            dbHi = dbscore;
+        }
 
+    }
+    console.log("HIGHEST SCORE: " + dbHi + "p");
+}
+function errData(err){
+    console.log("Error");
+    console.log(err);
+}
 
 // #################### SETUP ######################
 function setup() {
@@ -709,11 +729,12 @@ function setup() {
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
 
-  console.log(firebase);
+  //console.log(firebase);
 
   var database = firebase.database();
   ref = database.ref('scores');
 
+  ref.on('value',gotData,errData);
 
     // button = createButton('MUTE/\nUNMUTE');
     // button.position(windowWidth/2, windowHeight-(windowHeight/4));
@@ -769,7 +790,8 @@ function draw() {
         hiScore=hitName + ((lvlnr) * nrBlocks);
        
     }
-    text("Hiscore: " + hiScore, windowWidth / 2, 40);
+    if(dbHi!=null){text("ALL TIME HIGH: " + dbHi,windowWidth/2,30);}else{text("loading highscores",windowWidth/2,30);}
+    text("Your hightest score: " + hiScore, windowWidth / 2, 40);
     text("Vivas: " + points,windowWidth/2,60);
    
     scale(0.5);
