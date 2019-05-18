@@ -1,12 +1,6 @@
 // COMMANDER KEEN
 
-// Firebase App (the core Firebase SDK) is always required and
-// // must be listed before other Firebase SDKs
-// var firebase = require("firebase/app");
-
-// // Add the Firebase products that you want to use
-// require("firebase/database");
-
+let ref;
 
 
 let player;
@@ -341,12 +335,18 @@ class Player {
                if(!deadsnd.isPlaying()){deadsnd.play();}
            }
             if(fallcount>50){
+                var data = {
+                    name: "Anonymous",
+                    score: hiScore
+                }
+                ref.push(data);
                 makeLvl();
                 player.y = windowHeight/2;
                 player.x = 100;
                 xscroll=0;
                 yscroll=0;
                 lvlnr=0;
+
 
             }
 
@@ -674,13 +674,6 @@ class Enemy {
 
 
 
-// function writeUserData(userId, name, email, imageUrl) {
-//     var scoredatabase = {};
-//     scoredatabase.name = "NAVN";
-//     scoredatabase.score = random(255);
-//    firebase.database().ref('https://fluffy-barnacle.firebaseio.com/').push(scoredatabase);
-//     console.log(scoredatabase);
-//   }
 
 
 // #################### SETUP ######################
@@ -701,8 +694,27 @@ function setup() {
     // makeLevel();
    
     song[0].loop();
-//    writeUserData();
-   
+
+
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBfAwlHcWXp7d2WFbyxzPe4aa16n7GFp30",
+    authDomain: "fluffy-barnacle.firebaseapp.com",
+    databaseURL: "https://fluffy-barnacle.firebaseio.com",
+    projectId: "fluffy-barnacle",
+    storageBucket: "fluffy-barnacle.appspot.com",
+    messagingSenderId: "747065307498",
+    appId: "1:747065307498:web:5815c34f19da2bb9"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  console.log(firebase);
+
+  var database = firebase.database();
+  ref = database.ref('scores');
+
+
     // button = createButton('MUTE/\nUNMUTE');
     // button.position(windowWidth/2, windowHeight-(windowHeight/4));
     // button.mousePressed(startStop);
@@ -755,6 +767,7 @@ function draw() {
     text("Platform number: " + String(hitName + (lvlnr * nrBlocks)), windowWidth / 2, 50);
     if(hitName + (lvlnr * nrBlocks)>hiScore){
         hiScore=hitName + ((lvlnr) * nrBlocks);
+       
     }
     text("Hiscore: " + hiScore, windowWidth / 2, 40);
     text("Vivas: " + points,windowWidth/2,60);
