@@ -6,7 +6,10 @@ let grndHitEnemy = [];
 let block;
 let blocks = [];
 let hiScore = 0;
-let nrBlocks = 100;
+let nrBlocks = 5;
+let nrEnemies= 1;
+let enemies = [];
+let lvlnr = 0;
 
 let bg = [];
 let groundY;
@@ -46,6 +49,7 @@ let playerLookUp;
 let playerDead;
 let playerPogo = [];
 let playerPogol = [];
+
 let enemy = [];
 let enemyl = [];
 let rock = [];
@@ -86,19 +90,28 @@ function preload() {
     bg[0] = loadImage("imgs/bg.png");
     bg[1] = loadImage("imgs/bg1.png");
     bg[2] = loadImage("imgs/bg2.gif");
+    bg[3] = loadImage("imgs/bg3.png");
+    bg[4] = loadImage("imgs/bg4.png");
+    bg[5] = loadImage("imgs/bg5.png");
+    bg[6] = loadImage("imgs/bg6.png");
+    bg[7] = loadImage("imgs/bg7.png");
+    bg[8] = loadImage("imgs/bg8.png");
+    bg[9] = loadImage("imgs/bg9.png");
+    bg[10] = loadImage("imgs/bg10.png");
+    bg[11] = loadImage("imgs/bg11.png");
 
     finish = loadImage("imgs/finish.png");
 
     potion = loadImage("imgs/potion.png");
 
-    enemy[0] = loadImage("imgs/enemies/ball1.png");
-    enemy[1] = loadImage("imgs/enemies/ball2.png");
-    enemy[2] = loadImage("imgs/enemies/ball3.png");
-    enemy[3] = loadImage("imgs/enemies/ball4.png");
-    enemyl[0] = loadImage("imgs/enemies/ball1l.png");
-    enemyl[1] = loadImage("imgs/enemies/ball2l.png");
-    enemyl[2] = loadImage("imgs/enemies/ball3l.png");
-    enemyl[3] = loadImage("imgs/enemies/ball4l.png");
+    enemy[0] = loadImage("imgs/enemies/en1.png");
+    enemy[1] = loadImage("imgs/enemies/en2.png");
+    enemy[2] = loadImage("imgs/enemies/en3.png");
+    enemy[3] = loadImage("imgs/enemies/en4.png");
+    enemyl[0] = loadImage("imgs/enemies/enl1.png");
+    enemyl[1] = loadImage("imgs/enemies/enl2.png");
+    enemyl[2] = loadImage("imgs/enemies/enl3.png");
+    enemyl[3] = loadImage("imgs/enemies/enl4.png");
 
 
     //sounds
@@ -293,6 +306,7 @@ class Player {
                 player.x = 100;
                 xscroll=0;
                 yscroll=0;
+                lvlnr=0;
 
             }
 
@@ -437,8 +451,21 @@ class Player {
 
     //LOOK UP!
     lookup() {
-        console.log("lookdown");
+        console.log("lookup");
         this.img = playerLookUp;
+
+        ///LAST TILE THING
+        if(hitName == nrBlocks-1){
+            console.log("CONGRATS");
+            lvlnr +=1;
+            hitName=0;
+            makeLvl();
+                player.y = windowHeight/2;
+                player.x = 100;
+                xscroll=0;
+                yscroll=0;
+                
+        }
     }
     //FUNKSJON FOR BARE Å STÅ STILLE OG NULLSTILLE TELLERE OG INSTILLINGER
     static() {
@@ -454,7 +481,7 @@ class Enemy {
         this.y = 200;
         this.jmpy = 0;
         this.counter = 0;
-        this.speed = 5;
+        this.speed = random(6)+5;
         this.img = enemyl[0];
         this.left = false;
         this.falling=false;
@@ -467,32 +494,42 @@ class Enemy {
         this.fallspeed = 10;
         this.left;
         this.xmov=0;
+        this.blocknr = round(random(nrBlocks));
 
     }
     show() {
 
         this.bnf();
-       
-        image(this.img,this.x,this.y+50,50,50);
+        this.hitPlayer();
+        image(this.img,this.x,this.y,100,100);
+        this.counter++;
       
     }
+    hitPlayer(){
+        if(player.x > this.x - 100 && player.x < this.x + 100 && player.y < this.y +50 && player.y>this.y-50){
+            console.log("DEAD");
+            player.canJump=false;
+            
+            player.y+=120;
+        }
+    }
     bnf (){
-        this.x=blocks[4].x + this.xmov + xscroll;
-        this.y =blocks[4].y + yscroll ;
+        this.x=blocks[this.blocknr].x + this.xmov + xscroll;
+        this.y =blocks[this.blocknr].y + yscroll ;
        // console.log(this.x + "thisx \n" +(blocks[4].x+blocks[4].w+this.xmov+xscroll ) + " x" );
-        if((this.x>(blocks[4].x+blocks[4].w-50+xscroll ))){
+        if((this.x>(blocks[this.blocknr].x+blocks[this.blocknr].w-50+xscroll ))){
             this.left=true;
         }
-        if((this.x<(blocks[4].x+50+xscroll))){
+        if((this.x<(blocks[this.blocknr].x+50+xscroll))){
             this.left=false;
         }
         if(this.left){
-            this.xmov-=10;
-           // this.img = enemyl[0];
+            this.xmov-= this.speed;
+           this.img = enemyl[this.counter % 4];
         
         }else{
-            this.xmov+=10;
-          //  this.img = enemy[0];
+            this.xmov+=this.speed;
+           this.img = enemy[this.counter % 4];
         }
     }
 
@@ -561,7 +598,10 @@ function setup() {
     frameRate(20);
     player = new Player;
     blocks[0] = new Block;
-    enemy = new Enemy;
+    
+    for(i=0;i<nrEnemies;i++){
+        enemies.push(new Enemy);
+    }
     //console.log(blocks.length);
    
     // makeLevel();
@@ -581,19 +621,21 @@ function draw() {
     background(0); 
     
     //console.log(boost);
-    image(bg[0], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);
+    if(bg[lvlnr]){image(bg[lvlnr], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{console.log("NO BG!");}
     fill(255);
-    text("Platform number: " + String(hitName), windowWidth / 2, 50);
-    if(hitName>hiScore){
-        hiScore=hitName;
+    text("Platform number: " + String(hitName + (lvlnr * nrBlocks)), windowWidth / 2, 50);
+    if(hitName + (lvlnr * nrBlocks)>hiScore){
+        hiScore=hitName + ((lvlnr) * nrBlocks);
     }
     text("Hiscore: " + hiScore, windowWidth / 2, 40);
     scale(0.5);
    // background(122, 90, 18);
   
    drawAndMoveBlocks();
-   enemy.show();
-
+   
+   for(var e=0;e<nrEnemies;e++){
+       enemies[e].show();
+   }
    
    for (i = 0; i < nrBlocks; i++) {
        blocks[i].checkCollision(player);
