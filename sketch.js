@@ -34,7 +34,7 @@ let xscroll = 0;
 let yscroll = 0;
 
 //versjonsnr, for å sjekke om ting blir oppdatert.
-let vernr = "0.0.0.4";
+let vernr = "0.0.0.5";
 //sound vars
 let song = [];
 let jumpsnd;
@@ -653,7 +653,13 @@ function startStop(){
 function draw() {
     // kan bruke scale(0.5); for å få ting til å bli mindre
     background(0); 
-    
+   //console.log(document.visibilityState);
+
+   document.addEventListener("visibilitychange", function() {
+    //console.log(document.hidden, document.visibilityState);
+    startStop();
+  }, false);
+
     //console.log(boost);
     if(bg[lvlnr]){image(bg[lvlnr], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{console.log("NO BG!");}
     fill(255);
