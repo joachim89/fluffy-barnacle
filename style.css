@@ -11,6 +11,7 @@ body {
     width:100%-8px;
     background: #e9bd5f;
     border: 8px solid #f3eec5;
+ 
   
 }
 
@@ -31,10 +32,11 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     color: black;
 }
+
 h1{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 35px;
-    margin:10px;
+    
     color: #000000;
 
 }
@@ -42,6 +44,7 @@ h2{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size:24;
     margin:10px;
+    padding-left: 10px;
     color: #000000;
 }
 p {
@@ -49,13 +52,20 @@ p {
     color: #000000;
     font-size: 20;
     margin:10px;
+    padding-left: 10px;
   
   
 }
 a {
     color: #000000;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 30px;
-    margin: 10px;
+    font-size: 25px; 
+    padding-left: 10px;
+
+    margin-left: 10px;
     text-decoration: none;
 }
+.hiscores {
+    color: red;
+    font-size: 24px;
+  }
