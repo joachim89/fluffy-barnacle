@@ -19,6 +19,8 @@
         Joachim Skjaevestad
   </author>
  <preference name="fullscreen" value="true" />
- 
-  <access origin="*" />
+ <gap:plugin name="cordova-plugin-whitelist" source="npm" />
+<access origin="*" />
+<allow-navigation href="*" />
+<allow-intent href="*" />
 </widget>
