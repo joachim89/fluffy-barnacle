@@ -3,14 +3,15 @@
     xmlns:gap   = "http://phonegap.com/ns/1.0"
     id          = "com.phonegap.keen"
     versionCode = "10"
-    version     = "1.0.0" >
+    version     = "1.0.2" >
 
 <!-- versionCode is optional and Android only -->
   <icon src="icon.png" />
   <splash src="splash.png" />
   <name>Commander Keen!</name>
 
- 
+  <application android:debuggable = "false" />
+  
   <description>
       Reach the end.
   </description>

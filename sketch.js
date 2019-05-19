@@ -188,7 +188,7 @@ class Block {
 			fill(255, 0, 0, 80);
 			this.hit = true;
             hitName = this.id;
-            if(who==enemy){this.enemyHit=true;console.log("ENEMYHIT");enemyHitName=this.id;}
+            if(who==enemy){this.enemyHit=true;enemyHitName=this.id;}
 			who.ny = 0;
 			who.vy = 0;
 			who.y = this.y + yscroll;
@@ -459,7 +459,7 @@ class Player {
         }
         this.jumpCount++;
         if (this.jumpCount > this.jumpHeight) {
-            console.log("NOT JUMPING ANYMORE!");
+            //console.log("NOT JUMPING ANYMORE!");
             jump = false;
         }
 
@@ -487,7 +487,7 @@ class Player {
 
     //LOOK DOWN!
     lookdown() {
-        console.log("lookdown");
+        //console.log("lookdown");
         this.img = playerLookDown[this.lookCounter];
         if (this.lookCounter == 0) {
             this.lookCounter = 1;
@@ -496,12 +496,12 @@ class Player {
 
     //LOOK UP!
     lookup() {
-        console.log("lookup");
+        //console.log("lookup");
         this.img = playerLookUp;
 
         ///LAST TILE THING
         if(hitName == nrBlocks-1){
-            console.log("CONGRATS");
+            //console.log("CONGRATS");
             canMove=false;
             levelcompsnd.play();
             setTimeout(nextLevel, 2000 );
@@ -553,7 +553,7 @@ class Vivas {
             this.v=false;
             vivsnd.play();
             points++;
-            console.log(points);
+           // console.log(points);
         }
     }
 }
@@ -595,7 +595,7 @@ class Enemy {
     }
     hitPlayer(){
         if(player.x > this.x - 50 && player.x < this.x + 50 && player.y < this.y +50 && player.y>this.y-50){
-            console.log("DEAD");
+            //console.log("DEAD");
             canMove=false;
             jump = false;
             deadsnd.playMode("untilDone");
@@ -688,18 +688,18 @@ function gotData(data){
         var k = dbkeys[dbi];
         var name = dbscores[k].name;
         var dbscore = dbscores[k].score;
-        console.log(name + ": " + dbscore + "p");
+        //console.log(name + ": " + dbscore + "p");
         if(dbscore > hiScore){
             if(dbscore>dbHi){dbHi = dbscore;}
             
         }
 
     }
-    console.log("HIGHEST SCORE: " + dbHi + "p");
+    //console.log("HIGHEST SCORE: " + dbHi + "p");
 }
 function errData(err){
-    console.log("Error");
-    console.log(err);
+    //console.log("Error");
+    //console.log(err);
 }
 
 

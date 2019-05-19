@@ -15,7 +15,7 @@ function gotData(data){
         var dbscore = dbscores[k].score;
         
         
-        console.log(name + ": " + dbscore + "p");
+        //console.log(name + ": " + dbscore + "p");
        poenglist.push(name + ": " + dbscore + "p");
        sortedscores.push(dbscore);
 
@@ -37,8 +37,8 @@ function gotData(data){
        pont.innerHTML=totstring;
 }
 function errData(err){
-    console.log("Error");
-    console.log(err);
+    //console.log("Error");
+    //console.log(err);
 }
        
        // Your web app's Firebase configuration

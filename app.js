@@ -31,5 +31,5 @@ var server = http.createServer(function onRequest (req, res) {
 
 // Listen
 server.listen(port, function () {
-             console.log("Server ut på port: " + port);
+            // console.log("Server ut på port: " + port);
      });
