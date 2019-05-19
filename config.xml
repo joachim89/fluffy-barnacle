@@ -10,7 +10,6 @@
   <splash src="splash.png" />
   <name>Commander Keen!</name>
 
-  <application android:debuggable = "false" />
   
   <description>
       Reach the end.
