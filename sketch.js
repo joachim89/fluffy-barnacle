@@ -843,10 +843,10 @@ function draw() {
 
 
     if(isMobile){
-        text("MOBIL",windowWidth/2,20);
+       // text("MOBIL",windowWidth/2,20);
         scale(0.35);
     }else{
-        text("PC",windowWidth/2,20);
+        //text("PC",windowWidth/2,20);
             scale(0.5);
             //text("PC",windowWidth/2,20);
         }
