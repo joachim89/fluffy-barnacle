@@ -894,8 +894,9 @@ function draw() {
      // TEKSTER  PLASSER FORNUFTIG: 
     if(isMobile && windowWidth<windowHeight){
         push();
-        scale(0.6);
-    }
+        scale(0.5);
+        var multiplo = 4;
+    }else {var multiplo=1;}
     textAlign(RIGHT);
     fill(0);
     text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), windowWidth - 28, 29);
@@ -911,23 +912,23 @@ function draw() {
     if(dbHi!=0){
         
         fill(0);
-        text("ALL TIME HIGH: " + dbHi,(windowWidth/3)+2,24);
+        text("ALL TIME HIGH: " + dbHi,((windowWidth/3)+2)*multiplo,24);
         fill(255);
-        text("ALL TIME HIGH: " + dbHi,windowWidth/3,22);
+        text("ALL TIME HIGH: " + dbHi,(windowWidth/3)*multiplo,22);
     
     }else{ 
         
         fill(0);
-        text("LOADING HIGHSCORES",(windowWidth/3)+2,24);
+        text("LOADING HIGHSCORES",((windowWidth/3)+2)*multiplo,24);
         fill(255);
-        text("LOADING HIGHSCORES",windowWidth/3,22);
+        text("LOADING HIGHSCORES",(windowWidth/3)*multiplo,22);
     }
     pop();
     fill(0);
     
-    text("Your hightest score: " + hiScore, (windowWidth / 2)+2, 60);
+    text("Your hightest score: " + hiScore, ((windowWidth / 2)+2)*multiplo, 60);
     fill(255);
-    text("Your hightest score: " + hiScore, windowWidth / 2, 58);
+    text("Your hightest score: " + hiScore, (windowWidth / 2)*multiplo, 58);
     textAlign(LEFT);
     //LEFT SIDE:
     fill(0);
