@@ -892,7 +892,10 @@ function draw() {
     //BACKGROUND IMAGE
     if(bg[lvlnr]){image(bg[lvlnr], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
      // TEKSTER  PLASSER FORNUFTIG: 
-
+    if(isMobile && windowWidth<windowHeight){
+        push();
+        scale(0.6);
+    }
     textAlign(RIGHT);
     fill(0);
     text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), windowWidth - 28, 29);
@@ -961,7 +964,11 @@ function draw() {
         lives++;
         bigtext("1 UP!");
     }
-   
+
+    //Sjekker at 
+    if(isMobile && windowWidth<windowHeight){
+        pop();
+    }
 
 
 
