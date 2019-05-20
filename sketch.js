@@ -2,7 +2,8 @@
 let isMobile = false; //initiate as false
 let ref;
 let dbHi=0;
-
+let textcounter=0;
+let tekst = "";
 let player;
 let ground;
 let grnd = [];
@@ -19,6 +20,8 @@ let vivasimg=[];
 let vivCounter = 0;
 let points = 0; 
 //let v = 0;
+let newRecord=false;
+let lives = 3;
 
 /// Lengde, antall monstre og antall vivas
 let nrBlocks = 25; //antall platformer per lvl
@@ -49,7 +52,7 @@ let xscroll = 0;
 let yscroll = 0;
 
 //versjonsnr, for å sjekke om ting blir oppdatert.
-let vernr = "0.0.0.5";
+let vernr = "0.0.0.6";
 //sound vars
 let song = [];
 let jumpsnd;
@@ -74,6 +77,12 @@ let potion;
 
 
 function preload() {
+    bigfont = loadFont('assets/bigfont.ttf');
+    regularfont = loadFont('assets/regularfont.ttf');
+
+    life0 = loadImage("imgs/moves/life0.png");    
+    life1 = loadImage("imgs/moves/life1.png");
+
     playerWalk[0] = loadImage("imgs/moves/walk1.png");
     playerWalk[1] = loadImage("imgs/moves/walk2.png");
     playerWalk[2] = loadImage("imgs/moves/walk3.png");
@@ -202,15 +211,20 @@ class Block {
 
 function makeLvl() {
     canMove=true;
+  
+
+
 	for (i = 0; i < nrBlocks; i++) {
 		blocks.push(new Block);
 		if (i > 0 && i<nrBlocks-1) {
+            blocks[i].len = round(random(2, 10));
 			blocks[i].w = blocks[i].len * 80;
 			blocks[i].x = blocks[i - 1].x + blocks[i - 1].w + random(200);
 		} else if(i==0){
 			blocks[i].w = blocks[i].len * 80;
 			blocks[i].x = 50;
 		}else if(i==nrBlocks-1){
+            blocks[i].len = 8;
             blocks[i].w = blocks[i].len * 80;
             blocks[i].x = blocks[i - 1].x + blocks[i - 1].w + random(200);
             blocks[i].finishBlock=true;
@@ -233,6 +247,24 @@ function makeLvl() {
         vivas[v].y2=random(150);
      }
     }
+
+
+//lager enemies og sånn
+
+if(enemies[0] && vivas[0]){
+    
+for(i=0;i<nrEnemies;i++){
+   enemies[i].blocknr = round(random(nrBlocks-3)+1);
+    if(blocks[enemies[i].blocknr].len < 4){
+        enemies[i].blocknr = round(random(nrBlocks-3)+1);
+    }
+}
+for(v=0; v<nrVivas;v++){
+    vivas[v].x2 = random(500);
+    vivas[v].y2 = random(150);
+    vivas[v].blocknr = round(random(nrBlocks));
+}
+}
 }
 function drawAndMoveBlocks() {
 
@@ -336,21 +368,32 @@ class Player {
                if(!deadsnd.isPlaying()){deadsnd.play();}
            }
             if(fallcount>50){
+                lives--;
+                if(lives!=1){
+                    var lifetekst = " Lives";
+                }else{var lifetekst= " Life";}
+                bigtext(lives + lifetekst + " left..."); // blir kanskje en bug med at teksten kommer opp rett før game over her?
+                if(lives==0){
                 var data = {
                     name: "Anonymous",
                     score: hiScore,
                     time: Date.now()
                 }
+                bigtext("GAME OVER!");
+                lvlnr=0;
+                points=0;
+                ref.push(data);
+                lives = 3;
+            }
                // if(hiScore>dbHi){ref.push(data);}
-               ref.push(data);
+              
                 makeLvl();
                 
                 player.y = windowHeight/2;
                 player.x = 100;
                 xscroll=0;
                 yscroll=0;
-                lvlnr=0;
-                points=0;
+               
 
 
             }
@@ -396,6 +439,20 @@ class Player {
             this.x += this.vx;
         }
 
+
+        // if(this.x>(windowWidth/2)-100 && this.x <(windowWidth/2)+100){
+        //     xscroll-=this.vx;
+        // }else{
+        //     this.x+=this.vx;
+           
+        // }
+        // if(this.y>(windowHeight/2)-100 && this.y <(windowHeight/2)+100){
+        //     yscroll-=this.vy;
+        // }else{
+          
+        //     this.y+=this.vy;
+        // }
+
         if (this.y < (windowHeight / 2) - 100 && !falling ) {
             yscroll -= this.vy;
         } else if (this.y > (windowHeight / 2) + 100 && !jump) {
@@ -403,10 +460,8 @@ class Player {
         } else {
             this.y += this.vy;
         }
-        //this.y += this.vy;
-
         
-          
+       
         if (dir == "right") {
             if(jump||falling){
                 player.nx=20+boost;
@@ -526,7 +581,23 @@ function nextLevel(){
         yscroll=0;
         
 }
-
+function bigtext(in_text){
+    tekst = in_text;
+    textcounter=30;
+}
+function bigtextshow(){
+    push();
+  scale(2);
+ // textFont(bigfont);
+    fill(0);
+    textAlign(CENTER);
+    text(tekst,(windowWidth/4)+2,(windowHeight/4)+2);
+    fill(255);
+    text(tekst,windowWidth/4,windowHeight/4);
+    if(textcounter>0){ textcounter--; }
+    
+    pop();
+}
 
 class Vivas {
     constructor(){
@@ -604,13 +675,13 @@ class Enemy {
         }
     }
     bnf (){
-        this.x=blocks[this.blocknr].x + this.xmov + xscroll;
+        this.x=blocks[this.blocknr].x + this.xmov + xscroll ;
         this.y =blocks[this.blocknr].y + yscroll ;
        // console.log(this.x + "thisx \n" +(blocks[4].x+blocks[4].w+this.xmov+xscroll ) + " x" );
-        if((this.x>(blocks[this.blocknr].x+blocks[this.blocknr].w-50+xscroll ))){
+        if((this.x>(blocks[this.blocknr].x+blocks[this.blocknr].w-100+xscroll ))){
             this.left=true;
         }
-        if((this.x<(blocks[this.blocknr].x+50+xscroll))){
+        if((this.x<(blocks[this.blocknr].x+0+xscroll))){
             this.left=false;
         }
         if(this.left){
@@ -801,8 +872,7 @@ function draw() {
 //     //console.log(document.hidden, document.visibilityState);
 //     startStop();
 //   }, false);
-
-
+   textFont(regularfont);
   window.addEventListener('blur', function(){
     
     song[0].stop();
@@ -816,16 +886,76 @@ function draw() {
 
 
     //console.log(boost);
-    if(bg[lvlnr]){image(bg[lvlnr], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{console.log("NO BG!");}
+
+   
+
+    //BACKGROUND IMAGE
+    if(bg[lvlnr]){image(bg[lvlnr], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
+     // TEKSTER  PLASSER FORNUFTIG: 
+
+    textAlign(RIGHT);
+    fill(0);
+    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), windowWidth - 28, 29);
     fill(255);
-    text("Platform number: " + String(hitName + (lvlnr * nrBlocks)), windowWidth / 2, 50);
+    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), windowWidth - 30, 27);
     if(hitName + (lvlnr * nrBlocks)>hiScore){
         hiScore=hitName + ((lvlnr) * nrBlocks);
        
     }
-    if(dbHi!=0){text("ALL TIME HIGH: " + dbHi,windowWidth/2,30);}else{text("loading highscores...",windowWidth/2,30);}
-    text("Your hightest score: " + hiScore, windowWidth / 2, 40);
-    text("Vivas: " + points,windowWidth/2,60);
+    textAlign(CENTER);
+    push();
+    scale(1.5);
+    if(dbHi!=0){
+        
+        fill(0);
+        text("ALL TIME HIGH: " + dbHi,(windowWidth/3)+2,24);
+        fill(255);
+        text("ALL TIME HIGH: " + dbHi,windowWidth/3,22);
+    
+    }else{ 
+        
+        fill(0);
+        text("LOADING HIGHSCORES",(windowWidth/3)+2,24);
+        fill(255);
+        text("LOADING HIGHSCORES",windowWidth/3,22);
+    }
+    pop();
+    fill(0);
+    
+    text("Your hightest score: " + hiScore, (windowWidth / 2)+2, 60);
+    fill(255);
+    text("Your hightest score: " + hiScore, windowWidth / 2, 58);
+    textAlign(LEFT);
+    //LEFT SIDE:
+    fill(0);
+    text("Vivas: " + points,30,60);
+    fill(255);
+    text("Vivas: " + points,28,58);
+    for(i=0;i<3;i++){
+        if(i<lives){image(life1,100+(25*i),10,20,20);}else{image(life0,100+(25*i),10,20,20);}
+    }
+    fill(0);
+    text("Lives: ",30,29);// + lives + "/3",windowWidth/2,70);
+    fill(255);
+    text("Lives: ",28,27);// + lives + "/3",windowWidth/2,70);
+
+    if(dbHi!=0){
+    if(hitName +(lvlnr * nrBlocks)>dbHi){//dbHi
+        
+        hiScore= hitName+(lvlnr *nrBlocks);
+        var data = {
+            name: "Anonymous",
+            score: hiScore,
+            time: Date.now()
+        }
+        if(!newRecord){
+            bigtext("NEW WORLD RECORD!!!");
+           newRecord=true;
+        }
+        ref.push(data);
+    }
+  
+}
    
 
 
@@ -841,6 +971,8 @@ function draw() {
     //     scale(0.2);
     // }
 
+    //FLYTTER ALT LITT NED:
+    translate(0,windowHeight/5);
 
     if(isMobile){
        // text("MOBIL",windowWidth/2,20);
@@ -1044,14 +1176,16 @@ function draw() {
    pop();
     if(hitName == nrBlocks-1){
         if(lvlnr<2){
-            text("LOOK UP TO ENTER THE NEXT LEVEL!", windowWidth/2,80);
+            bigtext("LOOK UP TO ENTER \nTHE NEXT LEVEL!");
         }
     }
-
+    if(textcounter>0){
+        bigtextshow();
+        }
     //###############################################
     textAlign(CENTER);
     fill(0);
-   // text(vernr, windowWidth / 2, 100)
+    text(vernr, windowWidth / 2, 100)
 }
 
 function touchStarted(event) {
