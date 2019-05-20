@@ -899,9 +899,9 @@ function draw() {
     }else {var multiplo=1;}
     textAlign(RIGHT);
     fill(0);
-    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), (windowWidth - 28)*multiplo, 29);
+    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), ((windowWidth )*multiplo)-28, 29);
     fill(255);
-    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), (windowWidth - 30)*multiplo, 27);
+    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), (windowWidth )*multiplo-30, 27);
     if(hitName + (lvlnr * nrBlocks)>hiScore){
         hiScore=hitName + ((lvlnr) * nrBlocks);
        
@@ -912,21 +912,21 @@ function draw() {
     if(dbHi!=0){
         
         fill(0);
-        text("ALL TIME HIGH: " + dbHi,((windowWidth/3)+2)*multiplo,24);
+        text("ALL TIME HIGH: " + dbHi,((windowWidth/3)*multiplo)+2,24);
         fill(255);
         text("ALL TIME HIGH: " + dbHi,(windowWidth/3)*multiplo,22);
     
     }else{ 
         
         fill(0);
-        text("LOADING HIGHSCORES",((windowWidth/3)+2)*multiplo,24);
+        text("LOADING HIGHSCORES",((windowWidth/3)*multiplo)+2,24);
         fill(255);
         text("LOADING HIGHSCORES",(windowWidth/3)*multiplo,22);
     }
     pop();
     fill(0);
     
-    text("Your hightest score: " + hiScore, ((windowWidth / 2)+2)*multiplo, 60);
+    text("Your hightest score: " + hiScore, ((windowWidth / 2)*multiplo)+2, 60);
     fill(255);
     text("Your hightest score: " + hiScore, (windowWidth / 2)*multiplo, 58);
     textAlign(LEFT);
