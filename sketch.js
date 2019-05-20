@@ -895,13 +895,13 @@ function draw() {
     if(isMobile && windowWidth<windowHeight){
         push();
         scale(0.5);
-        var multiplo = 4;
+        var multiplo = 2;
     }else {var multiplo=1;}
     textAlign(RIGHT);
     fill(0);
-    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), windowWidth - 28, 29);
+    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), (windowWidth - 28)*multiplo, 29);
     fill(255);
-    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), windowWidth - 30, 27);
+    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), (windowWidth - 30)*multiplo, 27);
     if(hitName + (lvlnr * nrBlocks)>hiScore){
         hiScore=hitName + ((lvlnr) * nrBlocks);
        
