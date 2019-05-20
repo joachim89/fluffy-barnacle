@@ -956,6 +956,11 @@ function draw() {
     }
   
 }
+    if(vivas>100&&lives<3){
+        vivas -=100;
+        lives++;
+        bigtext("1 UP!");
+    }
    
 
 
