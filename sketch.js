@@ -19,15 +19,18 @@ let vivas = [];
 let vivasimg=[];
 let vivCounter = 0;
 let points = 0; 
+let playerName;
 //let v = 0;
 let newRecord=false;
 let lives = 3;
+let started = false;
 
 /// Lengde, antall monstre og antall vivas
 let nrBlocks = 25; //antall platformer per lvl
 let nrEnemies= 2;  //antall monstre
-let nrVivas = 10; //antall vivas
-
+let nrVivas = 40; //antall vivas
+let nameBtn;
+let inputField;
 
 
 let bg = [];
@@ -775,7 +778,10 @@ function errData(err){
 
 
 
-
+function gotTada(data){
+   var arrr = data.val();
+   dbHi = arrr.score;
+}
 
 
 
@@ -835,15 +841,27 @@ if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine
 
   //console.log(firebase);
 
-  var database = firebase.database();
-  ref = database.ref('scores');
+  
+//   var database = firebase.database();
+//   ref = database.ref('scores');
 
-  ref.on('value',gotData,errData);
+//   ref.on('value',gotData,errData);
+
+
+  
+firebase.database().ref("scores").orderByChild("score").limitToLast(1).on('child_added',gotTada,errData);
 
     // button = createButton('MUTE/\nUNMUTE');
     // button.position(windowWidth/2, windowHeight-(windowHeight/4));
     // button.mousePressed(startStop);
+    
+    inputField = createInput('');
+   
+    inputField.position((windowWidth/2)-100, windowHeight/2);
 
+    nameBtn = createButton('START');
+    nameBtn.position((windowWidth/2)+100, windowHeight/2);
+    nameBtn.mousePressed(startGame);
 
 
 }
@@ -863,7 +881,45 @@ function startStop(){
 
 // #################### DRAW ######################
 
+function startGame(){
+    if(!started){
+    playerName = inputField.value();
+    if(playerName == "" || playerName==null){playerName="Anonymous";}
+    window.localStorage.setItem("name",playerName);
+    nameBtn.hide();
+    inputField.hide();
+    started=true;
+}else{
+    nameBtn.hide();
+    started=true;
+}
+}
 function draw() {
+    textFont(regularfont);
+    if(!started){
+        if(!window.localStorage.getItem("name")){
+        background(0);
+            if(bg[lvlnr]){image(bg[lvlnr], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
+        fill(255);
+        textAlign(CENTER);
+        text("WHATS YA NAME?",windowWidth/2,windowHeight/3);
+
+        
+
+
+        //INPUT TEXT OG KNAPP FOR NAVN
+
+
+
+
+    }else{
+        nameBtn.hide();
+        inputField.hide();
+       started=true;
+    }
+    }
+    if(started){
+    
     // kan bruke scale(0.5); for å få ting til å bli mindre
     background(0); 
    //console.log(document.visibilityState);
@@ -872,7 +928,7 @@ function draw() {
 //     //console.log(document.hidden, document.visibilityState);
 //     startStop();
 //   }, false);
-   textFont(regularfont);
+   
   window.addEventListener('blur', function(){
     
     song[0].stop();
@@ -948,7 +1004,7 @@ function draw() {
         
         hiScore= hitName+(lvlnr *nrBlocks);
         var data = {
-            name: "Anonymous",
+            name: playerName,
             score: hiScore,
             time: Date.now()
         }
@@ -1196,9 +1252,10 @@ function draw() {
         bigtextshow();
         }
     //###############################################
-    textAlign(CENTER);
-    fill(0);
-    text(vernr, windowWidth / 2, 100)
+    // textAlign(CENTER);
+    // fill(0);
+    // text(vernr, windowWidth / 2, 100)
+}
 }
 
 function touchStarted(event) {

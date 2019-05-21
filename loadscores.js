@@ -1,40 +1,17 @@
-function gotData(data){
-    // console.log(data.val());
-    var dbscores = data.val();
-    var dbkeys = Object.keys(dbscores);
+var dataArr=[];
 
+function gotTada(data){
+  dataArr.unshift(data.val());
+  const pont = document.getElementById("poeng");
+  var totstring ="<hr /><h2>HALL OF FAME:</h2> <p>";
+  if(dataArr.length>9){
+    for(i=0;i<dataArr.length;i++){
+   totstring+=((i+1) + ": " + dataArr[i].name + ": <b>" + dataArr[i].score + "p</b> <br />");
+  }
+     totstring+="</p>"
+     pont.innerHTML=totstring;
+  }
 
-
-    
-   // console.log(dbkeys);
-   var poenglist = [];
-   var sortedscores = [];
-    for(var dbi = 0; dbi<dbkeys.length;dbi++){
-        var k = dbkeys[dbi];
-        var name = dbscores[k].name;
-        var dbscore = dbscores[k].score;
-        
-        
-        //console.log(name + ": " + dbscore + "p");
-       poenglist.push(name + ": " + dbscore + "p");
-       sortedscores.push(dbscore);
-
-    }
-    sortedscores.sort(function(a, b){return a - b});
-    sortedscores.reverse();
-    // for(var i=0;i<dbscores.length;i++){
-    //   sortedscores.unshift(dbscores[i]);
-    // }
-    const pont = document.getElementById("poeng");
-    var totstring ="<hr /><h2>HALL OF FAME:</h2> <p>";
-    //pont.innerHTML = "<h2>HALL OF FAME:</h2>  <br /><p>";
-
-    
-       for(var i = 0; i<10;i++){
-        totstring+= "Anonymous: <b>" + sortedscores[i] + "p</b> <br />";
-       }
-       totstring+="</p>"
-       pont.innerHTML=totstring;
 }
 function errData(err){
     //console.log("Error");
@@ -54,12 +31,8 @@ function errData(err){
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
 
-  //console.log(firebase);
-
-  var database = firebase.database();
-  ref = database.ref('scores');//.limitToLast(10);
-
-  ref.on('value',gotData,errData);
+firebase.database().ref("scores").orderByChild("score").limitToLast(10).on('child_added',gotTada,errData);
+//console.log(dataArr); 
 
 
 
