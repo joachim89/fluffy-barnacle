@@ -855,12 +855,12 @@ firebase.database().ref("scores").orderByChild("score").limitToLast(1).on('child
     // button.position(windowWidth/2, windowHeight-(windowHeight/4));
     // button.mousePressed(startStop);
     
-    inputField = createInput('');
+    inputField = createInput();
    
-    inputField.position((windowWidth/2)-100, windowHeight/2);
+    inputField.position((windowWidth/2)-120, windowHeight/2);
 
     nameBtn = createButton('START');
-    nameBtn.position((windowWidth/2)+100, windowHeight/2);
+    nameBtn.position((windowWidth/2)+70, windowHeight/2);
     nameBtn.mousePressed(startGame);
 
 
@@ -895,6 +895,7 @@ function startGame(){
 }
 }
 function draw() {
+    //window.localStorage.clear();
     textFont(regularfont);
     if(!started){
         if(!window.localStorage.getItem("name")){
@@ -904,9 +905,12 @@ function draw() {
         textAlign(CENTER);
         text("WHATS YA NAME?",windowWidth/2,windowHeight/3);
 
+        inputField.elt.focus();
+        if(touchON&&mouseX>windowWidth/3){
+            startGame();
+        }
         
-
-
+       
         //INPUT TEXT OG KNAPP FOR NAVN
 
 
