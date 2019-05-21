@@ -28,7 +28,7 @@ let started = false;
 /// Lengde, antall monstre og antall vivas
 let nrBlocks = 25; //antall platformer per lvl
 let nrEnemies= 2;  //antall monstre
-let nrVivas = 40; //antall vivas
+let nrVivas = 20; //antall vivas
 let nameBtn;
 let inputField;
 
@@ -388,6 +388,9 @@ class Player {
                 points=0;
                 ref.push(data);
                 lives = 3;
+
+
+                //FÅ INN EN SET INTERALGREIEE HER
             }
                // if(hiScore>dbHi){ref.push(data);}
               
@@ -843,8 +846,8 @@ if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine
   //console.log(firebase);
 
   
-//   var database = firebase.database();
-//   ref = database.ref('scores');
+  var database = firebase.database();
+  ref = database.ref('scores');
 
 //   ref.on('value',gotData,errData);
 
@@ -884,8 +887,8 @@ function startStop(){
 
 function startGame(){
     if(!started){
-    playerName = inputField.value();
-    if(playerName == "" || playerName==null){playerName="Anonymous";}
+    playerName = String(inputField.value());
+    if(playerName == "" || playerName==undefined){playerName="Anonymous";}
     window.localStorage.setItem("name",playerName);
     nameBtn.hide();
     inputField.hide();
@@ -1008,21 +1011,23 @@ function draw() {
     if(hitName +(lvlnr * nrBlocks)>dbHi){//dbHi
         
         hiScore= hitName+(lvlnr *nrBlocks);
-        var data = {
-            name: playerName,
-            score: hiScore,
-            time: Date.now()
-        }
+        // var data = {
+        //     name: playerName,
+        //     score: hiScore,
+        //     time: Date.now()
+        // }
         if(!newRecord){
             bigtext("NEW WORLD RECORD!!!");
            newRecord=true;
         }
-        ref.push(data);
+        //ref.push(data);
     }
   
 }
-    if(vivas>100&&lives<3){
-        vivas -=100;
+
+    //POINTS = VIVAS TYDELIGVIS :S GIR NYTT LIV FOR 100 VIVAS
+    if(points>100&&lives!=3){
+        points -=100;
         lives++;
         bigtext("1 UP!");
     }
