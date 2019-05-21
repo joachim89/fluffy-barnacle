@@ -373,12 +373,13 @@ class Player {
             if(fallcount>50){
                 lives--;
                 if(lives!=1){
+                    //prevpoints+ points
                     var lifetekst = " Lives";
                 }else{var lifetekst= " Life";}
                 bigtext(lives + lifetekst + " left..."); // blir kanskje en bug med at teksten kommer opp rett før game over her?
                 if(lives==0){
                 var data = {
-                    name: "Anonymous",
+                    name: playerName,
                     score: hiScore,
                     time: Date.now()
                 }
