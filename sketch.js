@@ -335,6 +335,7 @@ function drawAndMoveBlocks() {
 //     }
 // }
 function restartGame(){
+    makeLvl();
     player.y = windowHeight/2;
     player.x = 100;
     xscroll=0;
@@ -342,6 +343,7 @@ function restartGame(){
     lvlnr=0;
     points=0;
     lives = 3;
+  
 }
 // ################ HER ER PLAYER KLASSEN. ALL INFO OG FUNKSJONER.. ###################
 class Player {
