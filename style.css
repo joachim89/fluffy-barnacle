@@ -4,8 +4,7 @@ body {
     margin:0px;
     background:#0b1c33;
     background: url("imgs/bg.png");
-    background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: 2000px auto;
     overflow:hidden;
     
 }
