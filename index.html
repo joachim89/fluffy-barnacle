@@ -12,12 +12,12 @@
     <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
-<script src="loadscores.js"></script>
+
   </head>
   <body>
     <div class="container" >
       <h1>  <a href="index.html">
-        <img src="imgs/keenlogo.png" alt="COMMANDER KEEN" />
+        <img src="imgs/keenlogo.png"  alt="COMMANDER KEEN" />
       </a></h1>
       <div id="greet"></div>
        <h2>MAIN MENU</h2>
@@ -30,7 +30,9 @@
        
        <div id="poeng"></div>
     </div>
+    <script src="loadscores.js"></script>
     <script>
+      
       function clearAndHide(){
         window.localStorage.clear();
         console.log("CLEARED");
@@ -41,8 +43,8 @@
         const greettxt = document.getElementById("greet");
         var navnvar =  window.localStorage.getItem("name");
         if(navnvar==null){navnvar="";}
-  var totstring ="<h2>HELLO AGAIN " +navnvar.toUpperCase()+ " <button value='X' onClick='clearAndHide()' id='btnX'>X</button>"+"</h2>"  ;
-    if(navnvar!=null &&navnvar !="Anonymous" && navnvar!=""){ greettxt.innerHTML=totstring;}
+  var totstring2 ="<h2>HELLO AGAIN " +navnvar.toUpperCase()+ " <button value='X' onClick='clearAndHide()' id='btnX'>X</button>"+"</h2>"  ;
+    if(navnvar!=null &&navnvar !="Anonymous" && navnvar!=""){ greettxt.innerHTML=totstring2;}
     
 </script>
 

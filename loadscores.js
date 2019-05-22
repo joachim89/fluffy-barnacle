@@ -1,12 +1,13 @@
 var dataArr=[];
-
+const pont = document.getElementById("poeng");
+pont.innerHTML="<hr /><h2>HALL OF FAME:</h2> <p><br /><p> loading scores...</p>";
 function gotTada(data){
   dataArr.unshift(data.val());
-  const pont = document.getElementById("poeng");
+  
   var totstring ="<hr /><h2>HALL OF FAME:</h2> <p>";
   if(dataArr.length>9){
     for(i=0;i<dataArr.length;i++){
-   totstring+=((i+1) + ": " + dataArr[i].name + ": <b>" + dataArr[i].score + "p</b> <br />");
+   totstring+=((i+1) + ": " + dataArr[i].name + ":<b>"  + dataArr[i].score + "p</b> <br />");
   }
      totstring+="</p>"
      pont.innerHTML=totstring;

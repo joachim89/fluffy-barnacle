@@ -14,7 +14,6 @@ let block;
 let blocks = [];
 let hiScore = 0;
 let enemies = [];
-let lvlnr = 3;
 let canMove = true;
 let vivas = [];
 let vivasimg=[];
@@ -30,6 +29,9 @@ let started = false;
 let nrBlocks = 25; //antall platformer per lvl
 let nrEnemies= 2;  //antall monstre
 let nrVivas = 20; //antall vivas
+let lvlnr = 0;
+
+
 let nameBtn;
 let inputField;
 
@@ -332,7 +334,15 @@ function drawAndMoveBlocks() {
 //         }
 //     }
 // }
-
+function restartGame(){
+    player.y = windowHeight/2;
+    player.x = 100;
+    xscroll=0;
+    yscroll=0; 
+    lvlnr=0;
+    points=0;
+    lives = 3;
+}
 // ################ HER ER PLAYER KLASSEN. ALL INFO OG FUNKSJONER.. ###################
 class Player {
     constructor() {
@@ -384,25 +394,28 @@ class Player {
                     score: hiScore,
                     time: Date.now()
                 }
-                bigtext("GAME OVER!");
-                lvlnr=0;
-                points=0;
+                bigtext("GAME OVER! \n\n" + playerName.toUpperCase() + ": " + hiScore + "p",60);
+                
                 console.log(data);
                 ref.push(data);
-                lives = 3;
+               
 
-
-                //FÅ INN EN SET INTERALGREIEE HER
+               
+                //FÅ INN EN SET INTERVALGREIEE HER
             }
                // if(hiScore>dbHi){ref.push(data);}
-              
-                makeLvl();
+                if(lives>0){
+                
                 
                 player.y = windowHeight/2;
                 player.x = 100;
                 xscroll=0;
                 yscroll=0;
+            }else{
+                setInterval(restartGame(),2000);
                
+                
+            }
 
 
             }
@@ -590,9 +603,10 @@ function nextLevel(){
         yscroll=0;
         
 }
-function bigtext(in_text){
+function bigtext(in_text,timez){
     tekst = in_text;
-    textcounter=30;
+    if(timez){textcounter=timez;}else{
+    textcounter=30;}
 }
 function bigtextshow(){
     push();
