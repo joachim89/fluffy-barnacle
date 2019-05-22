@@ -14,7 +14,7 @@ let block;
 let blocks = [];
 let hiScore = 0;
 let enemies = [];
-let lvlnr = 0;
+let lvlnr = 3;
 let canMove = true;
 let vivas = [];
 let vivasimg=[];
@@ -387,6 +387,7 @@ class Player {
                 bigtext("GAME OVER!");
                 lvlnr=0;
                 points=0;
+                console.log(data);
                 ref.push(data);
                 lives = 3;
 
@@ -897,9 +898,25 @@ function startGame(){
 }else{
     nameBtn.hide();
     started=true;
+
 }
 }
 function draw() {
+    if(!playerName){
+    playerName=window.localStorage.getItem("name");
+}
+  
+  window.addEventListener('blur', function(){
+    
+    song[0].stop();
+ }, false);
+ 
+ window.addEventListener('focus', function(){
+    if(!song[0].isPlaying()){
+        song[0].play();
+    }
+ }, false);
+
     //window.localStorage.clear();
     textFont(regularfont);
     if(!started){
@@ -941,18 +958,7 @@ function draw() {
 //     //console.log(document.hidden, document.visibilityState);
 //     startStop();
 //   }, false);
-   
-  window.addEventListener('blur', function(){
-    
-    song[0].stop();
- }, false);
- 
- window.addEventListener('focus', function(){
-    if(!song[0].isPlaying()){
-        song[0].play();
-    }
- }, false);
-
+  
 
     //console.log(boost);
 
