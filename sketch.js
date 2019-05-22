@@ -595,13 +595,13 @@ function bigtext(in_text){
 }
 function bigtextshow(){
     push();
-  scale(2);
+  scale(1.5);
  // textFont(bigfont);
     fill(0);
     textAlign(CENTER);
-    text(tekst,(windowWidth/4)+2,(windowHeight/4)+2);
+    text(tekst,(windowWidth/3)+2,(windowHeight/3)+2);
     fill(255);
-    text(tekst,windowWidth/4,windowHeight/4);
+    text(tekst,windowWidth/3,windowHeight/3);
     if(textcounter>0){ textcounter--; }
     
     pop();
