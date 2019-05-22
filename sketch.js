@@ -1,4 +1,5 @@
 // COMMANDER KEEN
+
 let isMobile = false; //initiate as false
 let ref;
 let dbHi=0;
@@ -872,7 +873,6 @@ firebase.database().ref("scores").orderByChild("score").limitToLast(1).on('child
 
 
 
-
 function startStop(){
 
     if (song[0].isPlaying()) {
@@ -911,9 +911,10 @@ function draw() {
         text("WHATS YA NAME?",windowWidth/2,windowHeight/4);
 
         inputField.elt.focus();
-        if(touchON&&mouseX>(windowWidth/2)+70 && mouseX<(windowWidth/2)+270 && mouseY>(windowHeight/3)-100 && mouseY<(windowHeight/3)+100){
+        if(touchON&&mouseX>(windowWidth/2)+70 && mouseX<(windowWidth/2)+270){//} && mouseY>(windowHeight/3)-100 && mouseY<(windowHeight/3)+100){
             startGame();
         }
+        
         if(keyIsDown(13)&&inputField.value()){
             //console.log("ENTER");
             startGame();
@@ -1300,3 +1301,5 @@ function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
     if(player){player.y = blocks[hitName].y;}
 }
+
+
