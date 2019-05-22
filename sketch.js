@@ -905,7 +905,7 @@ function draw() {
     if(!started){
         if(!window.localStorage.getItem("name")){
         background(0);
-            if(bg[lvlnr]){image(bg[lvlnr], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
+            if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowWidth,windowHeight);}// 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
         fill(255);
         textAlign(CENTER);
         text("WHATS YA NAME?",windowWidth/2,windowHeight/4);
@@ -959,7 +959,7 @@ function draw() {
    
 
     //BACKGROUND IMAGE
-    if(bg[lvlnr]){image(bg[lvlnr], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
+    if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowWidth,windowHeight);}// 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
      // TEKSTER  PLASSER FORNUFTIG: 
     if(isMobile && windowWidth<windowHeight){
         push();
@@ -1299,6 +1299,9 @@ function touchEnded(event){
 }
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
+ 
+    inputField.position((windowWidth/2)-120, windowHeight/3);
+    nameBtn.position((windowWidth/2)+70, windowHeight/3);
     if(player){player.y = blocks[hitName].y;}
 }
 
