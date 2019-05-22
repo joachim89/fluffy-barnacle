@@ -888,6 +888,7 @@ function startStop(){
 function startGame(){
     if(!started){
     playerName = String(inputField.value());
+   
     if(playerName == "" || playerName==undefined){playerName="Anonymous";}
     window.localStorage.setItem("name",playerName);
     nameBtn.hide();
@@ -913,7 +914,10 @@ function draw() {
         if(touchON&&mouseX>(windowWidth/2)+70 && mouseX<(windowWidth/2)+270 && mouseY>(windowHeight/3)-100 && mouseY<(windowHeight/3)+100){
             startGame();
         }
-        
+        if(keyIsDown(13)&&inputField.value()){
+            //console.log("ENTER");
+            startGame();
+        }
        
         //INPUT TEXT OG KNAPP FOR NAVN
 
