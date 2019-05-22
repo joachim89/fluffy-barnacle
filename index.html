@@ -31,11 +31,18 @@
        <div id="poeng"></div>
     </div>
     <script>
+      function clearAndHide(){
+        window.localStorage.clear();
+        console.log("CLEARED");
+        //btnX.hide();
+        var elem = document.getElementById('greet');
+        elem.parentNode.removeChild(elem);
+      }
         const greettxt = document.getElementById("greet");
         var navnvar =  window.localStorage.getItem("name");
-       
-  var totstring ="<h2>HALLO " +navnvar.toUpperCase()+"</h2>" ;
-    if(navnvar!=null){ greettxt.innerHTML=totstring;}
+        if(navnvar==null){navnvar="";}
+  var totstring ="<h2>HELLO AGAIN " +navnvar.toUpperCase()+ " <button value='X' onClick='clearAndHide()' id='btnX'>X</button>"+"</h2>"  ;
+    if(navnvar!=null &&navnvar !="Anonymous" && navnvar!=""){ greettxt.innerHTML=totstring;}
   
 </script>
 
