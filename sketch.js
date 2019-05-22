@@ -861,10 +861,10 @@ firebase.database().ref("scores").orderByChild("score").limitToLast(1).on('child
     
     inputField = createInput();
    
-    inputField.position((windowWidth/2)-120, windowHeight/2);
+    inputField.position((windowWidth/2)-120, windowHeight/3);
 
     nameBtn = createButton('START');
-    nameBtn.position((windowWidth/2)+70, windowHeight/2);
+    nameBtn.position((windowWidth/2)+70, windowHeight/3);
     nameBtn.mousePressed(startGame);
 
 
@@ -907,10 +907,10 @@ function draw() {
             if(bg[lvlnr]){image(bg[lvlnr], 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
         fill(255);
         textAlign(CENTER);
-        text("WHATS YA NAME?",windowWidth/2,windowHeight/3);
+        text("WHATS YA NAME?",windowWidth/2,windowHeight/4);
 
         inputField.elt.focus();
-        if(touchON&&mouseX>windowWidth/3){
+        if(touchON&&mouseX>(windowWidth/2)+70 && mouseX<(windowWidth/2)+270 && mouseY>(windowHeight/3)-100 && mouseY<(windowHeight/3)+100){
             startGame();
         }
         
