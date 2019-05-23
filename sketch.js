@@ -413,6 +413,7 @@ class Player {
                 player.x = 100;
                 xscroll=0;
                 yscroll=0;
+                canMove=true;
             }else{
                 setInterval(restartGame(),2000);
                
