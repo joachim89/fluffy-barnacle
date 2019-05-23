@@ -42,6 +42,9 @@
       }
         const greettxt = document.getElementById("greet");
         var navnvar =  window.localStorage.getItem("name");
+        if(navnvar!=null){if(navnvar.length>10){
+      navnvar = navnvar.substring(0,9)+"...";
+}}
         if(navnvar==null){navnvar="";}
   var totstring2 ="<h2>HELLO AGAIN " +navnvar.toUpperCase()+ " <button value='X' onClick='clearAndHide()' id='btnX'>X</button>"+"</h2>"  ;
     if(navnvar!=null &&navnvar !="Anonymous" && navnvar!=""){ greettxt.innerHTML=totstring2;}

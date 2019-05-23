@@ -878,15 +878,15 @@ firebase.database().ref("scores").orderByChild("score").limitToLast(1).on('child
     // button.position(windowWidth/2, windowHeight-(windowHeight/4));
     // button.mousePressed(startStop);
     
-    inputField = createInput();
-   
+    inputField = createInput("Anonymous","text");
+    
     inputField.position((windowWidth/2)-120, windowHeight/3);
 
     nameBtn = createButton('START');
     nameBtn.position((windowWidth/2)+70, windowHeight/3);
     nameBtn.mousePressed(startGame);
 
-
+    
 }
 
 
@@ -908,6 +908,9 @@ function startGame(){
     playerName = String(inputField.value());
    
     if(playerName == "" || playerName==undefined){playerName="Anonymous";}
+    console.log("original: " + playerName);
+    playerName = playerName.replace(/(<([^>]+)>)/ig,"");
+    console.log("stripped: " + playerName);
     window.localStorage.setItem("name",playerName);
     nameBtn.hide();
     inputField.hide();
@@ -919,6 +922,8 @@ function startGame(){
 }
 }
 function draw() {
+    
+
     if(!playerName){
     playerName=window.localStorage.getItem("name");
 }
@@ -937,7 +942,7 @@ function draw() {
     //window.localStorage.clear();
     textFont(regularfont);
     if(!started){
-        if(!window.localStorage.getItem("name")){
+        if(!window.localStorage.getItem("name") || window.localStorage.getItem("name")=="Anonymous"){
         background(0);
             if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowWidth,windowHeight);}// 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
         fill(255);
@@ -948,6 +953,12 @@ function draw() {
         if(touchON&&mouseX>(windowWidth/2)+70 && mouseX<(windowWidth/2)+270){//} && mouseY>(windowHeight/3)-100 && mouseY<(windowHeight/3)+100){
             startGame();
         }
+            if(touchON && mouseX<windowWidth/2 && mouseX>(windowWidth/2)-300){
+                if(inputField.value()=="Anonymous"){inputField.value("");}
+            }
+           
+        
+        
         
         if(keyIsDown(13)&&inputField.value()){
             //console.log("ENTER");
@@ -1296,8 +1307,14 @@ function draw() {
 }
 }
 
+
+
+
+
+
 function touchStarted(event) {
     if(event.touches){
+       
 	if(event.touches[0]){
 		touchON=true;
 			
@@ -1327,5 +1344,3 @@ function windowResized() {
     nameBtn.position((windowWidth/2)+70, windowHeight/3);
     if(player){player.y = blocks[hitName].y;}
 }
-
-
