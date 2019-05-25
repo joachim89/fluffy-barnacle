@@ -32,6 +32,9 @@ let nrVivas = 20; //antall vivas
 let lvlnr = 0;
 
 
+let prevPostedScore;
+
+
 let nameBtn;
 let inputField;
 
@@ -336,6 +339,7 @@ function drawAndMoveBlocks() {
 // }
 function restartGame(){
     makeLvl();
+    player.dead = false;
     player.y = windowHeight/2;
     player.x = 100;
     xscroll=0;
@@ -364,11 +368,12 @@ class Player {
         this.maxVelocity = 40;
         this.friction = 0.5;
         this.fallspeed = 10;;
+        this.dead = false;
     }
 
     //TYNGDEKRAFT
     gravity() {
-        if (falling) {
+        if (falling || this.dead) {
             this.ny = this.fallspeed;
             if(this.fallspeed<30){this.fallspeed += 3;}
             canJump=false;
@@ -396,11 +401,19 @@ class Player {
                     score: hiScore,
                     time: Date.now()
                 }
-                bigtext("GAME OVER! \n\n" + playerName.toUpperCase() + ": " + hiScore + "p",60);
+                var nyttNavn = playerName.substring(0,9)+"...";
+                bigtext("GAME OVER! \n\n" + nyttNavn.toUpperCase() + ": " + hiScore + "p",60);
                 
                 console.log(data);
-                ref.push(data);
-               
+                if(hiScore){
+                    if(hiScore!=prevPostedScore){
+                        ref.push(data);
+                        prevPostedScore=hiScore;
+                    }
+                 }else{
+                     ref.push(data);
+                     prevPostedScore=hiScore;
+                 }
 
                
                 //FÅ INN EN SET INTERVALGREIEE HER
@@ -414,6 +427,8 @@ class Player {
                 xscroll=0;
                 yscroll=0;
                 canMove=true;
+                player.dead = false;
+
             }else{
                 setInterval(restartGame(),2000);
                
@@ -693,11 +708,12 @@ class Enemy {
     hitPlayer(){
         if(player.x > this.x - 50 && player.x < this.x + 50 && player.y < this.y +50 && player.y>this.y-50){
             //console.log("DEAD");
+            player.dead=true;
             canMove=false;
             jump = false;
             deadsnd.playMode("untilDone");
             if(!deadsnd.isPlaying()){deadsnd.play();}
-            player.y+=120;
+            // player.y+=120;
         }
     }
     bnf (){
@@ -938,6 +954,21 @@ function draw() {
         song[0].play();
     }
  }, false);
+
+
+ //Cordova fix
+ document.addEventListener('pause', function(){
+    
+    song[0].stop();
+ }, false);
+ 
+ document.addEventListener('resume', function(){
+    if(!song[0].isPlaying()){
+        song[0].play();
+    }
+ }, false);
+
+
 
     //window.localStorage.clear();
     textFont(regularfont);
@@ -1344,3 +1375,4 @@ function windowResized() {
     nameBtn.position((windowWidth/2)+70, windowHeight/3);
     if(player){player.y = blocks[hitName].y;}
 }
+

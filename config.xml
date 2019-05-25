@@ -19,6 +19,7 @@
         Joachim Skjaevestad
   </author>
  <preference name="fullscreen" value="true" />
+ <preference name="KeyboardDisplayRequiresUserAction" value="false" />
  <gap:plugin name="cordova-plugin-whitelist" source="npm" />
 <access origin="*" />
 <allow-navigation href="*" />
