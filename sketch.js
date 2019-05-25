@@ -373,7 +373,7 @@ class Player {
 
     //TYNGDEKRAFT
     gravity() {
-        if (falling || this.dead) {
+        if (falling) {
             this.ny = this.fallspeed;
             if(this.fallspeed<30){this.fallspeed += 3;}
             canJump=false;
