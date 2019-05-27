@@ -167,7 +167,7 @@ function preload() {
 
     //sounds
     song[0] = loadSound("sounds/oasis.mp3");
-    song[1] = loadSound("sounds/faster.mp3");
+    // song[1] = loadSound("sounds/faster.mp3");
 
     walksnd = loadSound("sounds/walk2.mp3");
     jumpsnd = loadSound("sounds/jump.mp3");
@@ -683,7 +683,7 @@ function bigtextshow(){
 class Vivas {
     constructor(){
         this.x = random(500);
-        this.y = random(150);
+        this.y = random(150) + 20;
         this.x2 = random(500);
         this.y2 = random(150);
         this.v = true;

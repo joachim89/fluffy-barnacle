@@ -7,7 +7,7 @@
 
 <!-- versionCode is optional and Android only -->
   <icon src="icon.png" />
-  <splash src="splash.png" />
+ 
   <name>Commander Keen!</name>
 
   
@@ -20,7 +20,9 @@
   </author>
  <preference name="fullscreen" value="true" />
  <preference name="KeyboardDisplayRequiresUserAction" value="false" />
+ 
  <gap:plugin name="cordova-plugin-whitelist" source="npm" />
+ <gap:plugin name="">
 <access origin="*" />
 <allow-navigation href="*" />
 <allow-intent href="*" />
