@@ -25,11 +25,23 @@ let newRecord=false;
 let lives = 3;
 let started = false;
 
+
+
+
 /// Lengde, antall monstre og antall vivas
-let nrBlocks = 25; //antall platformer per lvl
-let nrEnemies= 2;  //antall monstre
-let nrVivas = 20; //antall vivas
+
+const nrBlocksConst = 25;//antall platformer per lvl
+let nrEnemiesConst= 2;  //antall monstre
+let nrVivasConst = 20; //antall vivas
+
+
+let nrBlocks = nrBlocksConst; //antall platformer per lvl
+let nrEnemies= nrEnemiesConst;  //antall monstre
+let nrVivas = nrVivasConst; //antall vivas
 let lvlnr = 0;
+
+let newScoreVar=0;
+let newScorePrevHit=0;
 
 
 let prevPostedScore;
@@ -38,7 +50,7 @@ let prevPostedScore;
 let nameBtn;
 let inputField;
 
-
+let portrait;
 let bg = [];
 let groundY;
 let hitName = 0;
@@ -122,9 +134,9 @@ function preload() {
     rock[1] = loadImage("imgs/grnd/rock2.png");
     rock[2] = loadImage("imgs/grnd/rock3.png");
 
-    bg[0] = loadImage("imgs/bg.png");
+    bg[0] = loadImage("imgs/bg0.png");
     bg[1] = loadImage("imgs/bg1.png");
-    bg[2] = loadImage("imgs/bg2.gif");
+    bg[2] = loadImage("imgs/bg2.png");
     bg[3] = loadImage("imgs/bg3.png");
     bg[4] = loadImage("imgs/bg4.png");
     bg[5] = loadImage("imgs/bg5.png");
@@ -208,8 +220,9 @@ class Block {
             hitName = this.id;
             if(who==enemy){this.enemyHit=true;enemyHitName=this.id;}
 			who.ny = 0;
-			who.vy = 0;
-			who.y = this.y + yscroll;
+            who.vy = 0;
+            if(!player.dead){
+			who.y = this.y + yscroll;}else{player.y+=20;}
 		} else {
             this.hit = false;
            // this.enemyHit=false;
@@ -220,10 +233,15 @@ class Block {
 
 function makeLvl() {
     canMove=true;
+    hitName=0;
+    newScorePrevHit=0;
   
-
+    for(i=0;i<nrBlocks;i++){
+    if(blocks[i]){        blocks[i].finishBlock=false;}
+    }
 
 	for (i = 0; i < nrBlocks; i++) {
+        
 		blocks.push(new Block);
 		if (i > 0 && i<nrBlocks-1) {
             blocks[i].len = round(random(2, 10));
@@ -259,7 +277,12 @@ function makeLvl() {
 
 
 //lager enemies og sånn
-
+for(i=0;i<nrEnemies;i++){
+    enemies.push(new Enemy);
+}
+for(i=0;i<nrVivas;i++){
+    vivas.push(new Vivas);
+}
 if(enemies[0] && vivas[0]){
     
 for(i=0;i<nrEnemies;i++){
@@ -338,6 +361,13 @@ function drawAndMoveBlocks() {
 //     }
 // }
 function restartGame(){
+   nrBlocks = nrBlocksConst; //antall platformer per lvl
+   nrEnemies= nrEnemiesConst;  //antall monstre
+   nrVivas = nrVivasConst; //antall vivas
+    hitName=0;
+    newScoreVar=0;
+    newScorePrevHit=0;
+
     makeLvl();
     player.dead = false;
     player.y = windowHeight/2;
@@ -398,21 +428,21 @@ class Player {
                 if(lives==0){
                 var data = {
                     name: playerName,
-                    score: hiScore,
+                    score: newScoreVar,
                     time: Date.now()
                 }
                 var nyttNavn = playerName.substring(0,9)+"...";
-                bigtext("GAME OVER! \n\n" + nyttNavn.toUpperCase() + ": " + hiScore + "p",60);
+                bigtext("GAME OVER! \n\n" + nyttNavn.toUpperCase() + ": " + newScoreVar + "p",60);
                 
                 console.log(data);
-                if(hiScore){
-                    if(hiScore!=prevPostedScore){
+                if(newScoreVar){
+                    if(newScoreVar!=prevPostedScore){
                         ref.push(data);
-                        prevPostedScore=hiScore;
+                        prevPostedScore=newScoreVar;
                     }
                  }else{
                      ref.push(data);
-                     prevPostedScore=hiScore;
+                     prevPostedScore=newScoreVar;
                  }
 
                
@@ -427,7 +457,11 @@ class Player {
                 xscroll=0;
                 yscroll=0;
                 canMove=true;
+                
                 player.dead = false;
+                hitName=0;
+                newScorePrevHit=0;
+               
 
             }else{
                 setInterval(restartGame(),2000);
@@ -612,6 +646,12 @@ class Player {
 }
 function nextLevel(){
     lvlnr +=1;
+    //More blocks and 
+    nrBlocks+= round(random(5));
+    if(random(1)>0.5){nrEnemies+=1;}
+    nrVivas+=round(random(5));
+
+    console.log("BLOCKS: " + nrBlocks + "\nEnemies: " + nrEnemies + "\nVivas: " + nrVivas);
     hitName=0;
     
     makeLvl();
@@ -762,8 +802,7 @@ class Enemy {
             
         }
 
-
-
+        
          for (i = 0; i < nrBlocks; i++) {
              blocks[i].checkCollision(this);
              grndHitEnemy[i] = blocks[i].enemyHit;
@@ -776,7 +815,7 @@ class Enemy {
          } else{
             this.ny +=2;
          }
-
+        
          
         
         //this.y += this.vy;
@@ -938,7 +977,15 @@ function startGame(){
 }
 }
 function draw() {
-    
+
+    if(newScorePrevHit<hitName){
+        newScoreVar+=hitName-newScorePrevHit;
+        newScorePrevHit=hitName;
+    }
+    // console.log(newScoreVar);
+    if(windowHeight>windowWidth){
+      portrait=true;
+    }else{portrait=false;}
 
     if(!playerName){
     playerName=window.localStorage.getItem("name");
@@ -975,7 +1022,9 @@ function draw() {
     if(!started){
         if(!window.localStorage.getItem("name") || window.localStorage.getItem("name")=="Anonymous"){
         background(0);
-            if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowWidth,windowHeight);}// 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
+
+
+        if(portrait){ if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowHeight*1.597,windowHeight);} }else{    if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowWidth,windowHeight);} }// 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
         fill(255);
         textAlign(CENTER);
         text("WHATS YA NAME?",windowWidth/2,windowHeight/4);
@@ -1024,8 +1073,10 @@ function draw() {
    
 
     //BACKGROUND IMAGE
-    if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowWidth,windowHeight);}// 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
+    if(portrait){ if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowHeight*1.597,windowHeight);} }else{    if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowWidth,windowHeight);} }// 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
+    // if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowWidth,windowHeight);}// 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
      // TEKSTER  PLASSER FORNUFTIG: 
+     translate(0,30);
     if(isMobile && windowWidth<windowHeight){
         push();
         scale(0.5);
@@ -1033,16 +1084,22 @@ function draw() {
     }else {var multiplo=1;}
     textAlign(RIGHT);
     fill(0);
-    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), ((windowWidth )*multiplo)-28, 29);
+    text("SCORE: " + newScoreVar, ((windowWidth )*multiplo)-28, 29);
     fill(255);
-    text("SCORE: " + String(hitName + (lvlnr * nrBlocks)), (windowWidth )*multiplo-30, 27);
-    if(hitName + (lvlnr * nrBlocks)>hiScore){
-        hiScore=hitName + ((lvlnr) * nrBlocks);
+    text("SCORE: " + newScoreVar, (windowWidth )*multiplo-30, 27); //String(hitName + (lvlnr * nrBlocks))
+    // if(hitName + (lvlnr * nrBlocks)>hiScore){
+    //     hiScore=hitName + ((lvlnr) * nrBlocks);
+       
+    // }
+    if(newScoreVar>hiScore){
+        hiScore=newScoreVar;
+        window.localStorage.setItem("hiscore", hiScore);
        
     }
     textAlign(CENTER);
     push();
     scale(1.5);
+ 
     if(dbHi!=0){
         
         fill(0);
@@ -1059,10 +1116,11 @@ function draw() {
     }
     pop();
     fill(0);
-    
-    text("Your hightest score: " + hiScore, ((windowWidth / 2)*multiplo)+2, 60);
+    if(window.localStorage.getItem("hiscore")){var hiScoreText = window.localStorage.getItem("hiscore");}else{var hiScoreText=newScoreVar;
+    }
+    text("Your hightest score: " + hiScoreText, ((windowWidth / 2)*multiplo)+2, 60);
     fill(255);
-    text("Your hightest score: " + hiScore, (windowWidth / 2)*multiplo, 58);
+    text("Your hightest score: " + hiScoreText, (windowWidth / 2)*multiplo, 58);
     textAlign(LEFT);
     //LEFT SIDE:
     fill(0);
@@ -1078,9 +1136,9 @@ function draw() {
     text("Lives: ",28,27);// + lives + "/3",windowWidth/2,70);
 
     if(dbHi!=0){
-    if(hitName +(lvlnr * nrBlocks)>dbHi){//dbHi
+    if(newScoreVar>dbHi){//dbHi
         
-        hiScore= hitName+(lvlnr *nrBlocks);
+        hiScore= newScoreVar;
         // var data = {
         //     name: playerName,
         //     score: hiScore,
