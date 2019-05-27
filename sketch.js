@@ -1030,9 +1030,9 @@ function draw() {
         text("WHATS YA NAME?",windowWidth/2,windowHeight/4);
 
         inputField.elt.focus();
-        if(touchON&&mouseX>(windowWidth/2)+70 && mouseX<(windowWidth/2)+270){//} && mouseY>(windowHeight/3)-100 && mouseY<(windowHeight/3)+100){
-            startGame();
-        }
+        // if(touchON&&mouseX>(windowWidth/2)+70 && mouseX<(windowWidth/2)+270){//} && mouseY>(windowHeight/3)-100 && mouseY<(windowHeight/3)+100){
+        //     startGame();
+        // }
             if(touchON && mouseX<windowWidth/2 && mouseX>(windowWidth/2)-300){
                 if(inputField.value()=="Anonymous"){inputField.value("");}
             }
@@ -1075,7 +1075,8 @@ function draw() {
     //BACKGROUND IMAGE
     if(portrait){ if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowHeight*1.597,windowHeight);} }else{    if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowWidth,windowHeight);} }// 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
     // if(bg[lvlnr]){image(bg[lvlnr], 0,0,windowWidth,windowHeight);}// 0+(xscroll/100), 0+(yscroll/100), windowWidth+200, windowHeight+200);}else{}//console.log("NO BG!");}
-     // TEKSTER  PLASSER FORNUFTIG: 
+    
+    // TEKSTER  PLASSER FORNUFTIG: 
      translate(0,30);
     if(isMobile && windowWidth<windowHeight){
         push();
@@ -1411,7 +1412,7 @@ function touchStarted(event) {
 	if(event.touches[1]){
 		touchON2=true;
 	}
-	return false;
+	//return false;
   }
 }
 
@@ -1424,7 +1425,7 @@ function touchEnded(event){
 			touchON2=false;
 		}
 	}
-	return false;
+	//return false;
 }
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
