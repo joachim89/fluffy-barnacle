@@ -146,6 +146,15 @@ function preload() {
     bg[9] = loadImage("imgs/bg9.png");
     bg[10] = loadImage("imgs/bg10.png");
     bg[11] = loadImage("imgs/bg11.png");
+    bg[12] = loadImage("imgs/bg12.png");
+    bg[13] = loadImage("imgs/bg13.png");
+    bg[14] = loadImage("imgs/bg14.png");
+    bg[15] = loadImage("imgs/bg15.png");
+    bg[16] = loadImage("imgs/bg16.png");
+    bg[17] = loadImage("imgs/bg17.png");
+    bg[18] = loadImage("imgs/bg18.png");
+    bg[19] = loadImage("imgs/bg19.png");
+    bg[20] = loadImage("imgs/bg20.png");
 
     finish = loadImage("imgs/finish.png");
 
@@ -306,60 +315,13 @@ function drawAndMoveBlocks() {
 	}
 }
 
-// //OLD:
-// class Ground {
-//     constructor() {
-//         this.x = random(windowWidth / 81) * 81;
-//         this.y = random(windowHeight);
-//         this.hit;
-//         this.id;
-//         this.type = 0;
 
-//     }
-//     checkCollision() {
-//         image(rock[this.type], this.x + xscroll, this.y +yscroll + 50, 81, 100);
-//         if (this.type == 0) { this.pluss = 20; this.minus = 0; } else if (this.type == 2) { this.minus = 20; this.pluss = 0; } else { this.pluss = 0; this.minus = 0; }
-//         if (player.y < (this.y + 100 + yscroll) &&
-//             player.y > (this.y - 1 + yscroll) &&
-//             player.x > (this.x - 40 + this.pluss + xscroll) &&
-//             player.x < (this.x + 40 - this.minus + xscroll)
-//         ) {
-//             fill(255, 0, 0, 80);
-//             this.hit = true;
-//             hitName = this.id;
-//             player.ny = 0;
-//             player.vy = 0;
 
-//             //player.y-=30; // husk å endre til gravity
-//             player.y = this.y + yscroll;
-//             //rect(this.x + xscroll, this.y + yscroll + 50, 81, 100); // setter en rød firkant på den klossen du er på
-//         } else {
-//             this.hit = false;
-//         }
-//     }
-// }
-// function makeLevel(){
-//     for(i=0;i<300;i++){
-//         grnd.pop();
-//     }
-//     for (i = 0; i < 300; i++) {
-//         grnd.push(new Ground);
-//         grnd[i].id = i;
-//         grnd[i].type = i % 3;
-        
-//         if (i < 150) {
-//             if(i%3==0){
-//                 var r = random( 40)+1;
-               
-//             }
-//             grnd[i].y = 200 + round((i - 1) / 3) * r; // +(i*10);
-//             grnd[i].x = 0 + (i * 81);
-//         } else {
-//             grnd[i].y = 600 + round((i - 1) / 3) * -30 //-(i*2);
-//             grnd[i].x = -800 + (i * 81);
-//         }
-//     }
-// }
+
+
+
+
+
 function restartGame(){
    nrBlocks = nrBlocksConst; //antall platformer per lvl
    nrEnemies= nrEnemiesConst;  //antall monstre
@@ -437,6 +399,7 @@ class Player {
                 console.log(data);
                 if(newScoreVar){
                     if(newScoreVar!=prevPostedScore){
+                        if(!connected){bigtext("GAME OVER! \n\nNO INTERNET! \n\nfailed saving \nscore",90);}
                         ref.push(data);
                         prevPostedScore=newScoreVar;
                     }
@@ -992,28 +955,26 @@ function draw() {
 }
   
   window.addEventListener('blur', function(){
-    
+    noLoop();
     song[0].stop();
  }, false);
  
  window.addEventListener('focus', function(){
+     loop();
     if(!song[0].isPlaying()){
         song[0].play();
     }
  }, false);
 
 
- //Cordova fix
- document.addEventListener('pause', function(){
-    
-    song[0].stop();
- }, false);
- 
- document.addEventListener('resume', function(){
-    if(!song[0].isPlaying()){
-        song[0].play();
-    }
- }, false);
+ var connectedRef = firebase.database().ref(".info/connected");
+ connectedRef.on("value", function(snap) {
+   if (snap.val() === true) {
+     connected = true;
+   } else {
+     connected = false;
+   }
+ });
 
 
 
@@ -1060,15 +1021,7 @@ function draw() {
     
     // kan bruke scale(0.5); for å få ting til å bli mindre
     background(0); 
-   //console.log(document.visibilityState);
 
-//    document.addEventListener("visibilitychange", function() {
-//     //console.log(document.hidden, document.visibilityState);
-//     startStop();
-//   }, false);
-  
-
-    //console.log(boost);
 
    
 
@@ -1169,16 +1122,7 @@ function draw() {
 
 
     push();
-    //sjekker om du er mobil eller ei
-    // if(window.mobilecheck = function() {
-    //     var check = false;
-    //     (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
-    //     return check;
-    //   }){
-    // scale(0.5);}else{
-    //     scale(0.2);
-    // }
-
+   
     //FLYTTER ALT LITT NED:
     translate(0,windowHeight/5);
 
@@ -1341,36 +1285,7 @@ function draw() {
 
     if (mouseIsPressed) {
         touchON=true;
-        // if(mouseY<player.y){
-        //    player.jump();
-        // }
-        // if (mouseX < player.x) {
-        //     right = false;
-        // } else {
-        //     right = true;
-        // }
-        // if (abs(player.x - mouseX) > abs(player.y - mouseY)) {
-        //     if (mouseX < player.x) {
-
-        //          player.move("left");
-        //     } else {
-
-        //         player.move("right");
-        //     }
-        // } else {
-        //     if (mouseY < player.y && canJump) {
-        //         jump=true;
-        //     } else if(mouseY>player.y){
-
-        //         player.lookdown();
-        //     }
-        // }
-
-
-      
-
-
-
+        
     }
     }
 
@@ -1434,4 +1349,19 @@ function windowResized() {
     nameBtn.position((windowWidth/2)+70, windowHeight/3);
     if(player){player.y = blocks[hitName].y;}
 }
-
+function startStop(){
+     //Cordova fix
+ 
+ document.addEventListener('pause', function(){
+    noLoop();
+    song[0].stop();
+ }, false);
+ 
+ document.addEventListener('resume', function(){
+    if(!song[0].isPlaying()){
+        song[0].play();
+    }
+    loop();
+ }, false);
+}
+document.addEventListener("deviceready", startStop(), false); 
