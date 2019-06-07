@@ -24,7 +24,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return c.toString(36)};if(!''.replace(/
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
 
-firebase.database().ref("scores").orderByChild("score").limitToLast(10).on('child_added',gotTada,errData);
+firebase.database().ref("scores").orderByChild("score").limitToLast(20).on('child_added',gotTada,errData);
 //console.log(dataArr); 
 
 

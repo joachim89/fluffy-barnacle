@@ -1,5 +1,4 @@
 // COMMANDER KEEN
-
 let isMobile = false; //initiate as false
 let ref;
 let dbHi=0;

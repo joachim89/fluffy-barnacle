@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GAME</title>
+    <title>COMMANDER KEEN</title>
+    <link href="/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
      <link rel="stylesheet" href="style.css"> 
-     <style>body{overflow: hidden;}</style>
     <script src="lib/p5.js"></script>
     <script src="lib/addons/p5.dom.js"></script>
     <script src="lib/addons/p5.sound.js"></script>
@@ -13,14 +13,29 @@
 <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
 
-    
   </head>
   <body>
-    <div id="p5_loading" class="loadingclass"><object data="loader.gif" type="image/gif">
-      <img src="icon.png" />
-    </object></div>
+    <div class="container" >
+      <h1>  <a href="index.html">
+        <img src="imgs/keenlogo.png"  alt="COMMANDER KEEN" />
+      </a></h1>
+      <div id="greet"></div>
+       <h2>TOP 150 SCORES</h2>
+       
+       <div id="poeng"></div>
+       <br />
+       <br />
+       <a href="index.html"><b>Main Menu.</b></a>
+       <br />
+       <br />
+    </div>
+    <script src="topScores.js"></script>
+  
 
-<script src="sketch.js"></script>
+
+
+    
+  
   </body>
 </html>
 
