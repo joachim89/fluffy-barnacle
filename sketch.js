@@ -917,16 +917,6 @@ function resetname(){
     inputField.value("");
 }
 
-function startStop(){
-
-    if (song[0].isPlaying()) {
-        // .isPlaying() returns a boolean
-        song[0].stop();
-      } else {
-        song[0].play();
-      }
-}
-
 // #################### DRAW ######################
 
 function startGame(){
@@ -975,6 +965,28 @@ function matte(){
 } 
 
 function draw() {
+
+
+
+
+
+    window.addEventListener('blur', function(){
+   
+        song[0].stop();
+        console.log("pause()");
+        noLoop();
+     }, false);
+     
+     window.addEventListener('focus', function(){
+        if(!song[0].isPlaying()){
+            song[0].play();
+            console.log("resume()");
+        }
+        loop();
+     }, false);
+     
+
+    startStop()
     //matte();
     if(newScorePrevHit<hitName){
         newScoreVar+=hitName-newScorePrevHit;
@@ -1379,24 +1391,27 @@ function touchEnded(event){
 }
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
- 
+    
     inputField.position((windowWidth/2)-120, windowHeight/3);
     nameBtn.position((windowWidth/2)+70, windowHeight/3);
     if(player){player.y = blocks[hitName].y;}
 }
 function startStop(){
-     //Cordova fix
- 
- document.addEventListener('pause', function(){
-    noLoop();
-    song[0].stop();
- }, false);
- 
- document.addEventListener('resume', function(){
-    if(!song[0].isPlaying()){
-        song[0].play();
-    }
-    loop();
- }, false);
+    //Cordova fix
+console.log("startstop()");
+document.addEventListener('pause', function(){
+   
+   song[0].stop();
+   console.log("pause()");
+   noLoop();
+}, false);
+
+document.addEventListener('resume', function(){
+   if(!song[0].isPlaying()){
+       song[0].play();
+       console.log("resume()");
+   }
+   loop();
+}, false);
 }
 document.addEventListener("deviceready", startStop(), false); 
