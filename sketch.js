@@ -609,7 +609,7 @@ class Player {
 function nextLevel(){
     lvlnr +=1;
     //More blocks and 
-    nrBlocks+= round(random(5));
+    nrBlocks+= round(random(5)); //Bør kanskje fjernes?
     if(random(1)>0.5){nrEnemies+=1;}
     nrVivas+=round(random(5));
 
